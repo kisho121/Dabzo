@@ -1,0 +1,110 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Support
+{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid d-flex justify-content-between mt-2">
+    <img class="float-start playerLogo" src="{% static 'images/favicon.png' %}" alt="logo" width="100px">
+
+    <div class="text-center">
+        <h2 class="text-light fw-bolder" style="text-shadow: 1px 1px 2px white;">
+            SUPPORT
+        </h2>
+        <p class="text-info my-0" style="font-family: serif;">Here to help you with DABZO</p>
+    </div>
+
+    <div>
+        <button class="btn btn-sm btn-outline-info m-1" onclick="history.back()">
+            <i class="bi bi-arrow-left fs-6"></i>
+        </button>
+        <a href="{% url 'home' %}">
+            <button class="btn btn-sm btn-outline-info m-1">
+                <i class="bi bi-house fs-6"></i>
+            </button>
+        </a>
+    </div>
+</div>
+
+
+<div class="container text-white mt-4">
+
+    <h4 class="fw-bold text-primary">Need Help?</h4>
+    <p style="font-family: serif;">
+        Welcome to the dabzo Support Centre. We ensure you have the best experience
+        while enjoying music and videos across multiple languages. Our support team is
+        always ready to assist you with account issues, app guidance, streaming problems,
+        and feature-related questions.
+    </p>
+
+    <hr class="text-secondary">
+
+    <div class="row g-4 mt-3">
+
+        <!-- Section 1 -->
+        <div class="col-md-4">
+            <div class="p-3 bg-dark rounded shadow-sm h-100">
+                <h5 class="text-info">🎵 Music & Video Help</h5>
+                <p style="font-family: serif;">Facing playback issues? Not loading? Low quality?  
+                Our adaptive streaming ensures best quality based on your internet speed.</p>
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="col-md-4">
+            <div class="p-3 bg-dark rounded shadow-sm h-100">
+                <h5 class="text-info">🔐 Account & Login</h5>
+                <p style="font-family: serif;">For password support, login issues, or profile details, feel free to reach us anytime.</p>
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="col-md-4">
+            <div class="p-3 bg-dark rounded shadow-sm h-100">
+                <h5 class="text-info">⚙ Technical Support</h5>
+                <p style="font-family: serif;">Website not loading? UI not responding? Clear cache or switch browser —
+                or send us your issue instantly.</p>
+                
+            </div>
+        </div>
+
+    </div>
+
+    <hr class="text-secondary mt-4">
+    
+    <!-- Chat Bot Section -->
+    <div class="mt-4 text-center">
+        <h4 class="text-primary fw-bold">💬 Live Chat Support</h4>
+        <p class="text-white" style="font-family: serif;">Have a question? Chat with us instantly using our support bot below.</p>
+        <img src="{% static 'images/chatting.png' %}" alt="support-image" width="100px">
+        <br>
+
+       <button onclick="$crisp.push(['do', 'chat:open'])" 
+          class="btn btn-info glow-btn text-white"> Chat Now         
+        </button>
+       <i class="bi bi-chat-text-fill fs-1"></i>
+
+        </div>
+    </div>
+
+</div>
+
+    {% include 'starApp/inc/footer.html' %}
+
+
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="9f073679-048e-4eca-8060-29994574a373";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
+{% endblock scripts %}
+
+
+   
+
+
+

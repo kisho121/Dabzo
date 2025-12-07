@@ -1,0 +1,89 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Category
+{% endblock title %}
+
+{% block content %}
+   
+<div class="contain-body">
+    <div class=" row sidebar">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-1 ">
+            {% include 'starApp/inc/menu.html' %}        
+        </div>
+        <div class="main-content col-10 col-sm-10 col-md-10 col-lg-11  mt-0 top-0 pt-0">
+            <div class="container-fluid p-0 pb-0">
+                 <div class=" d-flex align-items-center py-2 " style="background: linear-gradient(135deg, #15115e, #070a22, #12025a);">
+
+                    <h2 class="text-light text-center fw-bolder mx-auto" style="text-shadow: 1px 1px 1px white; text-transform: uppercase; font-family: serif;">{{videoName}}</h2>
+                    
+                    <a href="{% url 'video' %}"> <button type="button" class="btn btn-outline-info me-4" data-bs-toggle="tooltip" title="Back"> <i class="bi bi-arrow-left topIcon fs-6"></i></button></a>
+                    <!-- <a href="{% url 'home' %}"><button type="button" class="btn p-0 me-4" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-4"></i></button></a> -->
+                   
+                    
+                    
+
+                </div>
+                
+                {% for category,videos in categorys_with_videos.items %}
+               
+                <div class="pb-0 mb-0 sectionBox" style="background-color: #021526;"  >
+                    <div class="d-flex align-items-center justify-content-between mb-1 ">
+                        <h2 class="text-light fw-bold topTitle  " style="font-family: serif; text-transform: uppercase; word-spacing: 3px;">{{ category.categorytitle }}</h2>
+
+                        <div class="arrow-controls me-3" >
+                            <button class="arrow-btn" style="background-color:#021526; border: 0px;" onclick="leftScroll('{{ category.id }}')">
+                                <i class="bi bi-caret-left-square topIcon"></i>
+                            </button>
+
+                            <button class="arrow-btn" style="background-color: #021526; border: 0px; " onclick="scrollRight('{{ category.id }}')">
+                              <i class="bi bi-caret-right-square topIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid p-0 my-0 mx-auto position-relative " >
+
+                        <div class="scroller " id="scroller-{{ category.id }}">
+                            {% for video in videos %}
+                                <div class="movie-card col-sm-6 col-md-4 col-lg-3 col-6  rounded-3 " style="background-color: #030423;">
+                                    <a href="{% url 'stream' videoName category.categorytitle video.subtitle %}" class="text-decoration-none">
+                                        <img src="{{ video.videothumbnail.url }}" 
+                                            class="card-img-top card-thumb mt-2 mb-0  rounded"
+                                            style="width: 100%; height: 190px; object-fit: cover;">      
+                                            <h5 class="text-center fw-bolder text-light sectionBoxText pt-2 "><i class="bi bi-play-circle  sectionBoxText text-light text-center py-2" style="font-family: serif;"></i> Watch</h5>                           
+                                    </a>                       
+                                </div>
+                            {% endfor %}
+                        </div>
+                    
+                    </div>
+                </div>
+                {% endfor %}
+                
+            </div>
+            <div class="mx-3"> {% include 'starApp/inc/footer.html' %}</div>
+          
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+    {% block scripts %}
+
+    <script>
+        function leftScroll(categoryId) {
+            let scroller = document.getElementById(`scroller-${categoryId}`);
+            scroller.scrollBy({ left: -800, behavior: 'smooth' }); // Adjust value for scrolling distance
+        }
+    
+        function scrollRight(categoryId) {
+            let scroller = document.getElementById(`scroller-${categoryId}`);
+            scroller.scrollBy({ left: 800, behavior: 'smooth' }); // Adjust value for scrolling distance
+        }
+    </script>
+
+    {% endblock scripts %}
+  

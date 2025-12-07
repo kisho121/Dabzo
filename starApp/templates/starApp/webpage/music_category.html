@@ -1,0 +1,101 @@
+    {% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Category
+{% endblock title %}
+
+ 
+{% block content %}
+
+<div class="contain-body ">
+
+    <div class="row sidebar">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+             {% include 'starApp/inc/menu.html' %}
+        </div>
+     
+     
+<div class="main-content col-10 col-sm-10 col-md-10 col-lg-11">
+
+    <div class="container-fluid py-lg-2" style="background-image: linear-gradient(#021526, grey);" >
+        <div class="d-flex">
+            <h2 class="display text-info text-center py-0 my-0 fs-3 language w-100">{{musicName}}</h2>
+            <button type="button" class="btn btn-outline-secondary" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6"></i></button>
+        </div>
+        
+        <hr class="text-light">
+        <p class="text-light Detailed fw-lighter" style="text-indent: 2vw;">Get ready for a high-energy mix of the Top hits. This collection showcases the cutting-edge of contemporary  music, driven by infectious rhythms, electronic synth-work, and massive viral hits. Dominated by composers who fuse traditional  instruments with global musical trends, this playlist is perfect for high-energy dancing, driving, or simply keeping up with the modern beat of the cinema.</p>
+    </div>
+
+  <div class="container-fluid image-grid-container  my-1 pt-2">
+  
+    
+
+    {% for category,audios in categories_with_audios.items %}
+
+    {% if forloop.counter <= 3 %}
+
+
+    <h2 class="h2 text-light py-2" style=" font-weight:900; font-family:serif">{{ category.categorytitle }}</h2>
+
+    <div class="row">
+    {% for audio in audios %}
+       <div class="col-6 col-sm-4 col-md-3 col-lg-2 my-3 image-grid-item1">
+        <div class="card py-3 rounded-2 displayCard">
+           <a href="{% url 'collection' musicName category.categorytitle audio.artistName  %}" style="text-decoration: none; text-align:center;">
+              <img class="card-img-top rounded-corners mx-auto art-img" src="{{ audio.artistImage.url }}" alt="" width="80%" height="80%">
+                <!-- <div class="card-img-overlay">
+                    <img class="pop-btn1" src="{% static 'images/play.png' %}" alt="" />
+                </div> -->
+              <p class="fw-bold mt-2 sizeText">{{ audio.artistName }}</p>
+            </a>
+        </div>
+       </div>
+    {% endfor %}
+    </div>
+
+    {% else %}
+    <h2 class="h2 text-light py-2" style=" font-weight:900; font-family:serif">{{ category.categorytitle }}</h2>
+    
+    <div class="row mb-2">
+    {% for audio in audios %}
+       <div class="col-6 col-sm-6 col-md-4 col-lg-3 image-grid-item2 mb-2">
+        <div class="card displayCard rounded-2">
+           <a href="{% url 'collection' musicName category.categorytitle audio.artistName  %}" style="text-decoration: none; text-align:center;">
+              <img class="card-img-top  art-album" src="{{ audio.artistImage.url }}" alt="" width="40%" height="40%">
+                <!-- <div class="card-img-overlay">
+                    <img class="pop-btn2" src="{% static 'images/play.png' %}" alt="" />
+                </div> -->
+              <p class="text-white fw-bold mt-2 sizeText fs-3" style="font-family: serif; letter-spacing:1px">{{ audio.artistName }}</p>
+            </a>
+        </div>
+       </div>
+    {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+    
+</div>
+ {% include 'starApp/inc/footer.html' %}
+</div>
+</div>
+</div>
+
+{% endblock content %}
+
+<!--{% block scripts %}
+
+<script>
+    document.getElementById('showMoreBtn').addEventListener('click',function(){
+        let hiddenList=document.querySelectorAll('.hidden-images');
+        hiddenList.forEach(function(item){
+            item.classList.remove('hidden-images');
+        });
+        this.style.display='none';
+
+    })
+</script>
+
+{%  endblock scripts %}
+

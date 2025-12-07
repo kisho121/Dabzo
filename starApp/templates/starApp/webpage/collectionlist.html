@@ -1,0 +1,257 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Category
+{% endblock title %}
+
+ 
+{% block content %}
+
+<div class="contain-body">
+
+  <div class="row sidebar">
+    <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+       {% include 'starApp/inc/menu.html' %}
+   </div>
+   
+   
+<div class="main-content col-10 col-sm-10 col-md-10 col-lg-11">
+
+<div class="container-fluid mb-2 artistBG">
+  <div class="row w-100">
+    <div class="col-12 col-sm-6 col-md-3 col-lg-2 mx-auto ">
+        <img src="{{ artistImage.url }}" alt="" class="img-thumbnail imgThumb" >
+    </div>
+      <div class="col-12 col-sm-12 col-md-8 col-lg-10">
+        <div class="d-flex w-100 mt-1">
+          <h2 class="text-center text-info fw-bolder w-100 fs-3 desc-title">{{ artistName }}</h2>
+          <button type="button" class="btn btn-outline-secondary fs-6" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6"></i></button>
+        </div>
+        <hr class="text-light">
+        <p class="text-white my-auto Detailed mx-auto " >{{artistDescription}}</p> 
+      </div>
+  </div>   
+</div>
+<h2 class="container-fluid text-light my-3 py-2 fw-bolder ps-0 " style="font-family: serif;">{{artistName}} Hits</h2>
+
+<table class="container-fluid ">
+  <thead class="py-2" style="background-color: #021526;">
+    <tr class=" row-head">
+      <th class="text-info py-3 text-center">S.No</th>
+      <th class="text-info py-3 text-center">Image</th>  
+      <th class="text-info py-3 ps-2 ps-lg-5">Song</th>
+      <th class="text-info py-3">Movie</th>
+      <th class="text-info text-center py-3">Like</th>
+    </tr>
+  </thead>
+  <tbody class="table-body">
+    {% for list in collections %}
+    <tr class="clickable-row"
+        data-href="{% url 'player' musicName categorytitle artistName list.songname %}">
+        
+      <td class="py-2 text-center">{{ forloop.counter }}</td>
+
+      <td class="py-2 text-center">
+        <div class="audio-img-container">
+          <img src="{{list.cltnImage.url}}" alt="" class="img-icon">
+        </div>
+      </td>
+
+      <td class="text-light song-title py-2 ps-2 ps-lg-5">{{ list.songname }}</td>
+      
+      <td class="py-2 song-title">{{ list.movie }}</td>
+      <td class="py-2 text-center">
+        <button class="table-like-btn {% if list.id in user_favourites %}liked{% endif %}" 
+                data-song-id="{{ list.id }}" 
+                onclick="toggleTableLike(event, this, {{ list.id }})"
+                title="{% if list.id in user_favourites %}Remove from Playlist{% else %}Add to Playlist{% endif %}">
+            <svg width="24" height="24" viewBox="0 0 24 24" 
+                fill="{% if list.id in user_favourites %}#ff4757{% else %}none{% endif %}" 
+                stroke="{% if list.id in user_favourites %}#ff4757{% else %}currentColor{% endif %}" 
+                stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+        </button>
+      </td>
+
+    </tr>
+    {% endfor %}
+</tbody>
+
+</table>
+{% include 'starApp/inc/footer.html' %}
+</div>
+</div>
+</div>
+</div>
+<style>
+  .like-btn, .table-like-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 5px;
+  }
+  
+  .like-btn {
+    margin-left: 15px;
+  }
+  
+  .like-btn:hover, .table-like-btn:hover {
+    transform: scale(1.2);
+    color: #ff4757;
+  }
+  
+  .like-btn.liked, .table-like-btn.liked {
+    color: #ff4757;
+    animation: heartBeat 0.3s ease;
+  }
+  
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1.1); }
+  }
+  
+  .table-like-btn svg {
+    pointer-events: none;
+  }
+</style>
+<script>
+  // CSRF Token helper function
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // Notification function
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+      color: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      z-index: 9999;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease;
+      max-width: 300px;
+      font-weight: 500;
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // Toggle like function for table buttons
+  function toggleTableLike(event, button, songId) {
+    // Prevent row click event from firing
+    event.stopPropagation();
+    
+    // Check if user is authenticated
+    {% if not user.is_authenticated %}
+      alert('Please login to add songs to your playlist');
+      window.location.href = "{% url 'account_login' %}";
+      return;
+    {% endif %}
+
+    const csrftoken = getCookie('csrftoken');
+    
+    // Disable button during request
+    button.disabled = true;
+    button.style.opacity = '0.6';
+    
+    fetch('{% url "toggle_favourite" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrftoken
+      },
+      body: `song_id=${songId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        const svg = button.querySelector('svg');
+        
+        if (data.liked) {
+          button.classList.add('liked');
+          svg.setAttribute('fill', '#ff4757');
+          svg.setAttribute('stroke', '#ff4757');
+          button.title = 'Remove from Playlist';
+          showNotification('Added to your playlist!', 'success');
+        } else {
+          button.classList.remove('liked');
+          svg.setAttribute('fill', 'none');
+          svg.setAttribute('stroke', 'currentColor');
+          button.title = 'Add to Playlist';
+          showNotification('Removed from your playlist', 'info');
+        }
+        
+        // Update all buttons with same song ID on the page
+        document.querySelectorAll(`[data-song-id="${songId}"]`).forEach(btn => {
+          const btnSvg = btn.querySelector('svg');
+          if (data.liked) {
+            btn.classList.add('liked');
+            btnSvg.setAttribute('fill', '#ff4757');
+            btnSvg.setAttribute('stroke', '#ff4757');
+          } else {
+            btn.classList.remove('liked');
+            btnSvg.setAttribute('fill', 'none');
+            btnSvg.setAttribute('stroke', 'currentColor');
+          }
+        });
+      } else {
+        showNotification(data.message || 'Error toggling favourite', 'error');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      showNotification('Error toggling favourite. Please try again.', 'error');
+    })
+    .finally(() => {
+      // Re-enable button
+      button.disabled = false;
+      button.style.opacity = '1';
+    });
+  }
+
+  // Make table rows clickable (existing functionality)
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll(".clickable-row");
+
+    rows.forEach(row => {
+      row.addEventListener("click", function(e) {
+        // Don't navigate if clicking the like button
+        if (!e.target.closest('.table-like-btn')) {
+          window.location.href = row.dataset.href;
+        }
+      });
+    });
+  });
+</script>
+
+
+{% endblock content %}
+
+

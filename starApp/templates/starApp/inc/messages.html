@@ -1,0 +1,21 @@
+{% for msg in messages %}
+<div class="alert alert-dismissible alert-success container text-light show fade w-50 " id="alert-control" style="position: absolute; background-color:green; right:0%">
+    {{msg}}
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+</div>
+
+{% endfor %}
+
+{% block scripts %}
+
+<script>
+    setTimeout(function(){
+        let alert=document.getElementById('alert-control')
+        
+        if(alert){
+            alert.style.display='none';
+        }
+    },2000);
+</script>
+
+{% endblock scripts %}

@@ -1,0 +1,44 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+User Profile
+{% endblock title %}
+
+{% block content %}
+<div class="container-fluid d-flex justify-content-between mb-0 pb-0">
+       
+        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
+        <div class="">
+            <h2 class="fw-bolder text-center" style="text-shadow: 1px 1px 1px white !important; color: white; font-family: serif;">
+               MY PROFILE
+            </h2>
+        <!-- <p class=" text-info text-center my-0 py-0 ">( {{ total_count }} song{{ total_count|pluralize }} )</p> -->
+            
+        </div>
+        <div class="float-end" >
+            <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
+            <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
+        </div>
+
+    </div>
+   
+<div class="container-fluid proPage" style="margin-bottom: 160px;">
+
+   <div class="col-md-4 col-sm-10 mx-auto text-center mt-5 py-2 bg-info rounded-2" style="border: 1px solid white;">
+    {% if user.userprofile.profilePicture %}
+    <img src="{{  user.userprofile.profilePicture.url }}" class="rounded-circle" alt="profile image" style="width: 100px; ">
+    {% else %}
+    <img src="{% static 'images/default-user.png' %}" class="rounded-circle" alt="default-image"  width="100px" >
+    {% endif %}
+    <h2 class="text-light">{{ user.username }}</h2>
+    <p class="text-light">{{ user.userprofile.dateOfBirth }}</p>
+    <p class="text-light">{{ user.email }}</p>
+    
+
+   </div>
+</div>
+
+{% include 'starApp/inc/footer.html' %}
+
+{% endblock content %}

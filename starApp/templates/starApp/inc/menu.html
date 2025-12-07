@@ -1,0 +1,97 @@
+{% load static %}
+<div class="menubar col-2 col-sm-2 col-md-2 col-lg-1" style="background-color: rgb(0, 0, 0);" >
+    <img class="logo-nav col-2 col-sm-2 col-md-2 col-lg-1" src="{% static 'images/favicon.png' %}" alt="logo" >
+    
+            <ul class="nav flex-column navigation">
+
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link text-white"><i class="bi bi-house biMenu"></i> <br>
+                         <span class="hiddenName"> Home </span>
+                    </a>
+                </li><br>
+        
+                <li class="nav-item my-0 py-0">
+                    <a href="{% url 'audio' %}" class="nav-link text-white"><i class="bi bi-music-note-beamed biMenu"></i> <br>
+                         <span class="hiddenName"> Music </span>
+                    </a>
+                </li><br>
+        
+                <li class="nav-item">
+                    <a href="{% url 'video' %}" class="nav-link text-white"><i class="bi bi-play-btn biMenu"></i> <br>
+                         <span class="hiddenName"> Videos </span>
+                    </a>
+                </li><br>
+
+                <li class="nav-item">
+                    <a href="{% url 'myPlaylist' %}" class="nav-link text-white"><i class="bi bi-heart biMenu"></i> <br>
+                         <span class="hiddenName"> Liked </span>
+                    </a>
+                </li><br>
+
+                <li class="nav-item">
+                    <a href="{% url 'search' %}" class="nav-link text-white"><i class="bi bi-search biMenu"></i> <br>
+                         <span class="hiddenName">Search</span>
+                        </a>
+                </li><br>
+                
+                {% else %}
+                <a href="{% url 'home' %}"></a>
+                {% endif %}
+                
+                <li class="nav-item" style="border: 1px solid white; border-radius: 50%;">
+                    <a href="#" class="nav-link p-0 text-white ">
+                        
+                           {% if user.userprofile.profilePicture %}
+                           <a href="{% url 'profile' %}">
+                               <img src="{{ user.userprofile.profilePicture.url }}" alt="Profile Picture" width="50vw" height="50vw" style="border-radius: 50%;">
+                            </a>
+                           {% else %}
+                           <a href="{% url 'profile' %}">
+                            <img src="{% static 'images/default-user.png' %}" alt="Default Profile" width="35vw" style="border-radius: 50%;">
+                            </a>
+                           {% endif %}
+                        <br>
+                        
+                        <span class="hiddenName">{{ user.username }}</span>
+                    </a>  
+                </li><br>
+                <li class="nav-item ">
+                    <a href="{% url 'account_logout' %}" class="nav-link text-white "><i class="bi bi-box-arrow-right biMenu"></i> <br>
+                         <span class="hiddenName">Logout</span>
+                    </a>
+                </li><br>
+                
+
+
+                <!-- {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="{% url 'home' %}" class="nav-link text-white"><i class="bi bi-house"></i> <br>
+                         <span class="hiddenName"> Home </span>
+                    </a>
+                </li><br>
+        
+                <li class="nav-item">
+                    <a href="{% url 'audio' %}" class="nav-link text-white"><i class="bi bi-music-note-beamed"></i> <br>
+                         <span class="hiddenName"> Music </span>
+                    </a>
+                </li><br>
+        
+                <li class="nav-item">
+                    <a href="{% url 'video' %}" class="nav-link text-white"><i class="bi bi-play-btn"></i> <br>
+                         <span class="hiddenName"> Movies </span>
+                    </a>
+                </li><br>
+
+                <li class="nav-item">
+                    <a href="{% url 'search' %}" class="nav-link text-white"><i class="bi bi-search"></i> <br>
+                         <span class="hiddenName">Search</span>
+                        </a>
+                </li><br>
+                
+                {% else %}
+                <a href="{% url 'home' %}"></a>
+                {% endif %} -->
+
+            </ul>
+ </div>

@@ -1,0 +1,96 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Search
+{% endblock title %}
+    
+
+    {% block content %}
+    <div class="contain-body" >
+
+        <div class="row sidebar">
+            <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+                {% include 'starApp/inc/menu.html' %}
+           </div>
+         <div class="main-content col-10 col-sm-10 col-md-10 col-lg-11" style="min-height: 100vh !important;">
+
+        <div class="pb-5">
+            <div class="contaier ">
+                <h3 class="container-fluid mb-2 pt-3 text-light text-center fw-bolder">Search <button class="btn btn-outline-light fs-6 float-end" type="button" onclick="history.back()" data-bs-togge="tooltip" title="Back"><i class="bi bi-arrow-left fs-6"></i></button></h3>
+                
+            </div>
+            <h6 class="text-secondary text-center">Search Songs, Videos and Movies Here..</h6>
+        <div class="col-md-3 col-sm-6 mx-auto">
+                <form method="GET" action="{% url 'search' %}"  class="input-group">
+                
+                    <input name="q" type="text" class=" col-lg-3 col-sm-6 form-control" placeholder="Search">
+                    
+                </form>
+        </div>
+        </div>
+
+        <div class="container ms-lg-5 mb-3">
+               
+            {% if searched %}
+                {% if songs %}
+                    <div>
+                        <h1 class="py-2 text-white fs-1 fw-bolder" style="font-family: serif;">SONGS</h1>
+                        <ul style="list-style: none;" class="song-list">
+                            {% for song in songs %}
+                            <li class="text-secondary">
+                                <a href="{% url 'player' song.categoryModel.musicModel.musickey.musicName song.categoryModel.musicModel.categorytitle song.categoryModel.artistName song.songname %}" class="text-info" style="text-decoration: none;">
+                                    <i class="bi bi-music-note-beamed text-secondary fs-6"></i> {{ song.songname }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                <h1 class="py-2 text-white fs-1 fw-bolder " style="font-family: serif;">SONGS</h1>
+                    <p class="text-warning text-center pb-3">No such song found *</p>
+                {% endif %}
+
+            {% else %}
+            <div class="mx-auto text-center py-md-5">
+                <img src="{% static 'images/search.png' %}" alt="png" width="200px" class="text-center mx-auto">
+            </div>
+                 
+            {% endif %}
+
+
+        
+        {% if searched %}
+            {% if videos %}
+                <h1 class="py-2  fs-1 mt-2 text-white fw-bolder" style="font-family: serif;">VIDEOS</h1>
+                <ul style="list-style: none;" class="song-list">
+                {% for video in videos %}
+                    <a class="link" href="{% url 'stream' video.videotitle.videomodel.videoName video.videotitle.categorytitle video.subtitle %}">
+                    <li class="text-warning"><i class="bi bi-play-btn text-secondary fs-5"></i> {{video.subtitle}}</li>
+                    </a>
+                {% endfor %}
+
+                </ul>
+            {% else %}
+            <h1 class="py-2 text-white fs-1 fw-bolder" style="font-family: serif;">VIDEOS</h1>
+                <p class="text-warning text-center pb-3">NO Such Video Found* </p>
+            {% endif %}
+        {% endif %}
+
+        </div>
+     
+            {% include 'starApp/inc/footer.html' %}
+       
+    
+        </div>
+    </div>
+    
+
+    {% endblock content %}
+
+    {% block scripts %}
+
+    {% endblock scripts %}
+
+    
+    

@@ -1,0 +1,1019 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Category
+{% endblock title %}
+
+ 
+{% block content %}
+
+<div class="contain-body container-fluid row w-100 m-0 p-0 ">
+    <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+        {% include 'starApp/inc/menu.html' %}
+    </div>
+     
+    <div class="main-content mx-auto col-10 col-sm-10 col-md-10 col-lg-11 px-0 mx-0">
+    
+      <div id="demo" class="carousel slide"  >
+          <div class="carousel-indicators">
+            {% for slide in slides %}
+              <button type="button" data-bs-target="#demo" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %} active {% endif %}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="slide{{ forloop.counter}}" ></button>
+            {% endfor %}
+          </div>
+          <div class="carousel-inner">
+            {% for slide in slides %}
+            <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                <img src="{{ slide.carousel_image.url}}" class=" position-relative caro-img " alt="{{slide.alt_text}}">           
+            </div>
+              {% endfor %}
+          </div>
+        
+          <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+      </div>
+      <h2 class="container my-2 text-center" style="font-weight: 900; text-shadow:1px 1px 1px aqua; color:aqua" >SELECT LANGUAGE</h2>
+        <div class="container-fluid ">
+            <div class="row mb-1">
+                {% for item in music %}
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 py-lg-2 py-2 langBox">
+                  <div class="card my-0 audioBox w-100 rounded-3" style="background-color: {% cycle 'orange' 'blue' 'green' 'purple' 'aqua' %};">
+                    <a href="{% url 'category' item.musicName %}" class="card-link text-decoration-none">
+                      <img class="card-img-top cardimage w-50 rounded-circle" src="{{ item.musicImage.url }}" alt="{{item.MusicName}}" />
+                        
+                        <div class="card-body">
+                            <h4 class="textLang  float-start" >{{ item.musicName }}</h4>
+                            
+                        </div>
+                    </a>
+                    </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+       <!-- ============ NEW GLOBAL TOP 10 MOST LIKED SONGS SECTION ============ -->
+<div class="global-top-section">
+    <div class="section-header"><i class="bi bi-trophy text-warning fs-3"></i>
+        <h2 class="section-title">
+            
+            TOP  10  LOVED  SONGS  
+           
+        </h2> <i class="bi bi-heart-fill text-danger fs-3"></i>
+        <p class="text-muted small">Most loved songs by all users worldwide</p>
+    </div>
+
+    {% if global_top_songs %}
+    <div class="table-responsive ">
+        <table class="container-fluid global-top-table">
+            <thead>
+                <tr>
+                    <th class="py-3 text-black text-center  col-1">Rank</th>
+                    <th  class="py-3 text-black text-center  col-2">Image</th>  
+                    <th  class="py-3 text-black col-4  ps-lg-3 ">Song </th>
+                    <th  class="py-3 text-black ps-1  col-4">Movie</th>
+                    <th class="py-3 text-black col-1  text-center" >Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for song in global_top_songs %}
+                <tr class="clickable-row song-row {% if forloop.counter == 1 %}champion-row{% elif forloop.counter <= 3 %}podium-row{% endif %}" 
+                    data-song-id="{{ song.id }}"
+                    data-likes="{{ song.like_count }}"
+                    data-href="{% url 'player' song.categoryModel.musicModel.musickey.musicName song.categoryModel.musicModel.categorytitle song.categoryModel.artistName song.songname %}">
+                    
+                    <!-- Rank Column with Special Badges for Top 3 -->
+                    <td class="text-center px-0 py-3 rank-cell">
+                        {% if forloop.counter == 1 %}
+                            <div class="rank-badge champion">
+                                <!-- <i class="bi bi-trophy-fill fa-xl"></i> -->
+                                <span class="rank-num">1</span>
+                                <div class="crown-icon">👑</div>
+                            </div>
+                        {% elif forloop.counter == 2 %}
+                            <div class="rank-badge runner-up">
+                                <!-- <i class="bi bi-trophy-fill fa-xl"></i> -->
+                                <span class="rank-num">2</span>
+                            </div>
+                        {% elif forloop.counter == 3 %}
+                            <div class="rank-badge third-place">
+                                <!-- <i class="bi bi-trophy-fill fa-xl"></i> -->
+                                <span class="rank-num">3</span>
+                            </div>
+                        {% else %}
+                            <div class="rank-number">
+                                <span class="number-circle">{{ forloop.counter }}</span>
+                            </div>
+                        {% endif %}
+                    </td>
+                    
+                    <!-- Image Column with Rank Overlay -->
+                    <td class="text-center py-3">
+                        <div class="song-image-container">
+                            <img src="{{ song.cltnImage.url }}" 
+                                 alt="{{ song.songname }}" 
+                                 class="img-icon">
+                            
+                            {% if forloop.counter <= 3 %}
+                            <div class="fire-badge">
+                                <i class="bi bi-fire fs-6 fa-xl"></i>
+                            </div>
+                            {% endif %}
+                            
+                            {% if forloop.counter == 1 %}
+                            <div class="champion-glow "></div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    
+                    <!-- Song Name -->
+                    <td class="ps-3 ps-lg-3 py-3">
+                        <div class="song-details">
+                            <span class="song-title">{{ song.songname }}</span>
+                            {% if forloop.counter == 1 %}
+                            <!-- <span class="badge bg-warning text-dark ms-2 pulse-badge"><br>
+                                <i class="bi bi-star-fill fa-xl"></i> #1 Hit
+                            </span> -->
+                            {% endif %}
+                        </div>
+                    </td>
+                    
+                    <!-- Movie Name -->
+                    <td class="py-3 ps-1">
+                        <span class="song-title">{{ song.movie }}</span>
+                    </td>
+                    
+                    <!-- Artist Name -->
+                    <!-- <td>
+                        <span class="artist-name">{{ song.artist }}</span>
+                    </td> -->
+                    
+                    <!-- Like Count with Progress Bar -->
+                    <td class="text-center py-3">
+                        <div class="like-stats">
+                            <div class="like-count-box">
+                                <i class="text-danger heartbeat"></i>
+                                <span class="like-count-num fs-6">{{ song.like_count }}</span>
+                            </div>
+                            {% if forloop.counter == 1 %}
+                            <div class="popularity-bar">
+                                <div class="popularity-fill" style="width: 100%;"></div>
+                            </div>
+                            {% else %}
+                            <div class="popularity-bar">
+                                <div class="popularity-fill" style="width: {{ song.like_percentage }}%;"></div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+                    
+                    <!-- Action Buttons -->
+                    <!-- <td class="text-center">
+                        <div class="action-btns-group">
+                            <button class="action-btn play-song-btn" 
+                                    data-song-url="{{ song.audio }}"
+                                    data-song-name="{{ song.songname }}"
+                                    title="Play Song">
+                                <i class="bi bi-play-circle-fill"></i>
+                            </button>
+                            
+                            <button class="action-btn wishlist-toggle-btn 
+                                    {% if song.id in user_wishlist_ids %}in-wishlist{% endif %}"
+                                    data-song-id="{{ song.id }}"
+                                    title="{% if song.id in user_wishlist_ids %}In Your Wishlist{% else %}Add to Wishlist{% endif %}">
+                                <i class="bi bi-heart{% if song.id in user_wishlist_ids %}-fill{% endif %}"></i>
+                            </button>
+                        </div>
+                    </td> -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-3 empty-state">
+        <i class="bi bi-music-note-list text-muted" style="font-size: 5rem;"></i>
+        <h4 class="text-muted mt-3">No data available yet</h4>
+        <p class="text-muted">Start liking songs to build the global top 10!</p>
+    </div>
+    {% endif %}
+</div>
+<!-- ============ END NEW GLOBAL TOP 10 SECTION ============ -->
+
+      <h2 class="h2 text-center text-danger my-md-2 " style="font-weight: 900;text-shadow:1px 1px 1px red; font-family: sans-serif; letter-spacing: 1px;">Popular Songs</h2>
+      <table class="container-fluid rounded-5">
+        <thead class=" rounded-5" style="background-color: #021526;">
+          <tr class="row-head ">
+            <th class="py-3 text-info text-center col-1">S.No</th>
+            <th  class="py-3 text-info text-center col-2">Image</th>  
+            <th  class="py-3 text-info col-4 ps-2 ps-lg-5">Song </th>
+            <th  class="py-3 text-info ps-1 col-4">Movie</th>
+            <th class="py-3 text-info col-1 text-center" >like</th>
+          </tr>
+        </thead>
+        <tbody class="table-body">
+          {% for list in favourites %}
+          <tr class="clickable-row" 
+          data-href="{% url 'player' list.categoryModel.musicModel.musickey.musicName list.categoryModel.musicModel.categorytitle list.categoryModel.artistName list.songname %}">
+            <td class="py-2 text-center">{{ forloop.counter }}</td>      
+            <td class="py-2 text-center">
+                <div class="audio-img-container">
+                  <img src="{{list.cltnImage.url}}" alt="" class="img-icon">          
+              </div>
+            </td>
+          
+            <td class="text-light song-title ps-2 ps-lg-5 py-2 ">
+              {{ list.songname }}
+            </td>
+          
+            <td class="py-2 ps-1 song-title">{{ list.movie }}</td>
+            <td class="py-2 text-center">
+              <button class="table-like-btn {% if list.id in user_favourites %}liked{% endif %}" 
+                      data-song-id="{{ list.id }}" 
+                      onclick="toggleTableLike(event, this, {{ list.id }})"
+                      title="{% if list.id in user_favourites %}Remove from Playlist{% else %}Add to Playlist{% endif %}">
+                  <svg width="24" height="24" viewBox="0 0 24 24" 
+                      fill="{% if list.id in user_favourites %}#ff4757{% else %}none{% endif %}" 
+                      stroke="{% if list.id in user_favourites %}#ff4757{% else %}currentColor{% endif %}" 
+                      stroke-width="2">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+              </button>
+            </td>
+           
+            
+          </tr>
+         {% endfor %}
+        </tbody>
+      </table>
+
+      {% include 'starApp/inc/footer.html' %}
+    </div>
+
+</div>
+<style>
+  .like-btn, .table-like-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 5px;
+  }
+  
+  .like-btn {
+    margin-left: 15px;
+  }
+  
+  .like-btn:hover, .table-like-btn:hover {
+    transform: scale(1.2);
+    color: #ff4757;
+  }
+  
+  .like-btn.liked, .table-like-btn.liked {
+    color: #ff4757;
+    animation: heartBeat 0.3s ease;
+  }
+  
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1.1); }
+  }
+  
+  .table-like-btn svg {
+    pointer-events: none;
+  }
+  /* ============ NEW GLOBAL TOP 10 STYLES ============ */
+.global-top-section {
+    padding-top: 10px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 20px;
+    margin: 20px auto;
+    max-width: 1500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.global-top-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.section-header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #ffd700, #ffed4e, #ffd700);
+    text-shadow: 1px 1px 1px yellow;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.3); }
+}
+
+.badge.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    font-weight: bold;
+    padding: 8px 15px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Table Styles */
+.global-top-table {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.global-top-table thead {
+    background: linear-gradient(135deg, #d30c9b, #a10757, #f35db9);
+    /* position: sticky; */
+    top: 0;
+    z-index: 10;
+    border: none;
+}
+
+.global-top-table thead th {
+    padding: 20px 3px;
+    font-weight: 900;
+    
+    font-size: 1.5vw;
+    font-family: serif;
+}
+
+.song-row {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.song-row:hover {
+    background: rgba(23, 162, 184, 0.25);
+    transform: translateX(10px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);
+    cursor: pointer;
+}
+
+.champion-row {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), transparent);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.podium-row {
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), transparent);
+}
+
+/* Rank Badges */
+.rank-cell {
+    position: relative;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 8px;
+    border-radius: 25px;
+    font-weight: 900;
+    font-size: 1rem;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.rank-badge.champion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffc107);
+    color: #000;
+    animation: pulse-champion 2s infinite, glow-gold 2s infinite;
+    position: relative;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.crown-icon {
+    position: absolute;
+    top: -20px;
+    font-size: 1.5rem;
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-champion {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes glow-gold {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); }
+    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+}
+
+.rank-badge.runner-up {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #cd7f32, #e8a87c, #d4a574);
+    color: #000;
+    box-shadow: 0 0 20px rgba(192, 192, 192, 0.5);
+    font-weight: bold;
+    
+}
+
+.rank-badge.third-place {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8, #d3d3d3);
+    color: #000;
+    box-shadow: 0 0 20px rgba(205, 127, 50, 0.5);
+    font-weight: bold;
+   
+}
+
+/* .rank-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+} */
+
+.number-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Song Image Container */
+.song-image-container {
+    position: relative;
+    display: inline-block;
+}
+
+/* .song-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+} */
+
+.song-row:hover .song-image {
+    transform: scale(1.15) rotate(3deg);
+    border-color: #17a2b8;
+    box-shadow: 0 8px 25px rgba(23, 162, 184, 0.6);
+}
+
+.fire-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #e71212, #ef0326);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+    animation: fire-pulse 1.5s infinite;
+    box-shadow: 0 0 15px rgba(143, 18, 18, 0.7);
+}
+
+@keyframes fire-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.champion-glow {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #ffd700, transparent, #ffd700);
+    animation: rotate-glow 3s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotate-glow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Song Details */
+.song-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* .song-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+} */
+
+.pulse-badge {
+    animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.movie-title {
+    color: #17a2b8;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.artist-name {
+    color: #a8dadc;
+    font-size: 0.95rem;
+}
+
+/* Like Stats */
+.like-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.like-count-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.heartbeat {
+    animation: heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1); }
+}
+
+.popularity-bar {
+    width: 60px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.popularity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #ffd700);
+    border-radius: 3px;
+    transition: width 1s ease;
+}
+
+/* Action Buttons */
+.action-btns-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.action-btn:hover {
+    transform: scale(1.2) rotate(10deg);
+    box-shadow: 0 0 20px rgba(23, 162, 184, 0.6);
+}
+
+.play-song-btn:hover {
+    background: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+}
+
+.wishlist-toggle-btn.in-wishlist {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    border-color: #ff6b6b;
+    color: #fff;
+}
+
+.wishlist-toggle-btn:hover {
+    background: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+/* Empty State */
+.empty-state {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 40px 20px;
+}
+@keyframes slideIn {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(400px); opacity: 0; }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .global-top-table {
+        font-size: 0.9rem;
+    }
+    
+    .song-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    /* .rank-badge {
+        padding: 8px 12px;
+        font-size: 1rem;
+    } */
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .song-row:hover {
+        transform: translateX(5px) scale(1.01);
+    }
+    
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+</style>
+
+<script>
+      // CSRF Token helper function
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  // ============ UNIFIED NOTIFICATION FUNCTION ============
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+      color: white;
+      padding: 15px 20px;
+      border-radius: 5px;
+      z-index: 9999;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      animation: slideIn 0.3s ease;
+      max-width: 300px;
+      font-weight: 500;
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  // ============ GLOBAL TOP 10 TABLE - WISHLIST TOGGLE ============
+  document.addEventListener('DOMContentLoaded', function() {
+    
+    // Play Song Functionality (Global Top 10)
+    document.querySelectorAll('.play-song-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const songUrl = this.getAttribute('data-song-url');
+        
+        this.style.transform = 'scale(1.4)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 300);
+        
+        // Navigate to player (adjust URL as needed)
+        window.location.href = `/audio/?play=${encodeURIComponent(songUrl)}`;
+      });
+    });
+    
+    // Wishlist Toggle for Global Top 10 Table
+    document.querySelectorAll('.wishlist-toggle-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        {% if not user.is_authenticated %}
+          alert('Please login to add songs to your playlist');
+          window.location.href = "{% url 'account_login' %}";
+          return;
+        {% endif %}
+        
+        const songId = this.getAttribute('data-song-id');
+        const csrftoken = getCookie('csrftoken');
+        const btn = this;
+        const icon = btn.querySelector('i');
+        const isInWishlist = btn.classList.contains('in-wishlist');
+        
+        // Disable button during request
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        
+        fetch('{% url "toggle_favourite" %}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrftoken
+          },
+          body: `song_id=${songId}`
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 'success') {
+            // Toggle button state
+            btn.classList.toggle('in-wishlist');
+            
+            if (data.action === 'added') {
+              // Add to wishlist
+              icon.classList.remove('bi-heart');
+              icon.classList.add('bi-heart-fill');
+              btn.title = 'In Your Wishlist';
+              showNotification('Added to your wishlist! ❤️', 'success');
+              
+              // Animate heart
+              icon.style.transform = 'scale(1.5)';
+              setTimeout(() => {
+                icon.style.transform = 'scale(1)';
+              }, 300);
+            } else {
+              // Remove from wishlist
+              icon.classList.remove('bi-heart-fill');
+              icon.classList.add('bi-heart');
+              btn.title = 'Add to Wishlist';
+              showNotification('Removed from wishlist', 'info');
+            }
+            
+            // Update like count in Global Top 10 table
+            updateLikeDisplay(songId, data.action, data.like_count);
+            
+            // Sync with HOT TRACKS table if same song exists there
+            syncHotTracksButton(songId, data.action);
+          } else {
+            showNotification(data.message || 'Error updating wishlist', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showNotification('Error updating wishlist. Please try again.', 'error');
+        })
+        .finally(() => {
+          // Re-enable button
+          btn.disabled = false;
+          btn.style.opacity = '1';
+        });
+      });
+    });
+    
+    // Update like count display in Global Top 10 table
+    function updateLikeDisplay(songId, action, newCount) {
+      const row = document.querySelector(`.global-top-table tr[data-song-id="${songId}"]`);
+      if (row) {
+        const likeCountEl = row.querySelector('.like-count-num');
+        if (likeCountEl && newCount !== undefined) {
+          // Animate count change
+          likeCountEl.style.transform = 'scale(1.5)';
+          likeCountEl.style.color = action === 'added' ? '#00ff00' : '#ff6b6b';
+          
+          setTimeout(() => {
+            likeCountEl.textContent = newCount;
+            setTimeout(() => {
+              likeCountEl.style.transform = 'scale(1)';
+              likeCountEl.style.color = '';
+            }, 300);
+          }, 200);
+        }
+      }
+    }
+    
+    // Sync HOT TRACKS button state when Global Top 10 button is clicked
+    function syncHotTracksButton(songId, action) {
+      const hotTracksBtn = document.querySelector(`.table-like-btn[data-song-id="${songId}"]`);
+      if (hotTracksBtn) {
+        const svg = hotTracksBtn.querySelector('svg');
+        if (action === 'added') {
+          hotTracksBtn.classList.add('liked');
+          svg.setAttribute('fill', '#ff4757');
+          svg.setAttribute('stroke', '#ff4757');
+          hotTracksBtn.title = 'Remove from Playlist';
+        } else {
+          hotTracksBtn.classList.remove('liked');
+          svg.setAttribute('fill', 'none');
+          svg.setAttribute('stroke', 'currentColor');
+          hotTracksBtn.title = 'Add to Playlist';
+        }
+      }
+    }
+    
+  });
+
+  // ============ HOT TRACKS TABLE - LIKE BUTTON TOGGLE ============
+  function toggleTableLike(event, button, songId) {
+    // Prevent row click event from firing
+    event.stopPropagation();
+    
+    // Check if user is authenticated
+    {% if not user.is_authenticated %}
+      alert('Please login to add songs to your playlist');
+      window.location.href = "{% url 'account_login' %}";
+      return;
+    {% endif %}
+
+    const csrftoken = getCookie('csrftoken');
+    
+    // Disable button during request
+    button.disabled = true;
+    button.style.opacity = '0.6';
+    
+    fetch('{% url "toggle_favourite" %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': csrftoken
+      },
+      body: `song_id=${songId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        const svg = button.querySelector('svg');
+        
+        if (data.action === 'added') {
+          // Add to playlist
+          button.classList.add('liked');
+          svg.setAttribute('fill', '#ff4757');
+          svg.setAttribute('stroke', '#ff4757');
+          button.title = 'Remove from Playlist';
+          showNotification('Added to your playlist!', 'success');
+        } else {
+          // Remove from playlist
+          button.classList.remove('liked');
+          svg.setAttribute('fill', 'none');
+          svg.setAttribute('stroke', 'currentColor');
+          button.title = 'Add to Playlist';
+          showNotification('Removed from your playlist', 'info');
+        }
+        
+        // Sync with Global Top 10 table if same song exists there
+        syncGlobalTopButton(songId, data.action);
+      } else {
+        showNotification(data.message || 'Error toggling favourite', 'error');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      showNotification('Error toggling favourite. Please try again.', 'error');
+    })
+    .finally(() => {
+      // Re-enable button
+      button.disabled = false;
+      button.style.opacity = '1';
+    });
+  }
+
+  // Sync Global Top 10 button state when HOT TRACKS button is clicked
+  function syncGlobalTopButton(songId, action) {
+    const globalBtn = document.querySelector(`.wishlist-toggle-btn[data-song-id="${songId}"]`);
+    if (globalBtn) {
+      const icon = globalBtn.querySelector('i');
+      if (action === 'added') {
+        globalBtn.classList.add('in-wishlist');
+        icon.classList.remove('bi-heart');
+        icon.classList.add('bi-heart-fill');
+        globalBtn.title = 'In Your Wishlist';
+      } else {
+        globalBtn.classList.remove('in-wishlist');
+        icon.classList.remove('bi-heart-fill');
+        icon.classList.add('bi-heart');
+        globalBtn.title = 'Add to Wishlist';
+      }
+    }
+  }
+
+  // ============ CLICKABLE ROWS (HOT TRACKS TABLE) ============
+  document.addEventListener("DOMContentLoaded", function () {
+    const rows = document.querySelectorAll(".clickable-row");
+
+    rows.forEach(row => {
+      row.addEventListener("click", function(e) {
+        // Don't navigate if clicking the like button
+        if (!e.target.closest('.table-like-btn')) {
+          window.location.href = row.dataset.href;
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock content %}
+
+
+

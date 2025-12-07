@@ -1,0 +1,39 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Privacy-Policy
+{% endblock title %}
+    {% block content %}
+<div class="container-fluid d-flex justify-content-between mb-0 pb-0">
+       
+        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
+        <div class="">
+            <h3 class="text-light fw-bolder text-center" style="text-shadow: 1px 1px 1px white;">
+                SPEED TEST
+            </h3>
+            
+        </div>
+        <div class="float-end" >
+            <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
+            <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
+        </div>
+
+    </div>
+    
+    <div class="container">
+        
+    <iframe src="https://fast.com" class="rounded-3" frameborder="0" width="100%" height="" style="height: 50vh;"></iframe>
+
+</div>
+
+    {% include 'starApp/inc/footer.html' %}
+
+    {% endblock content %}
+
+    {% block scripts %}
+
+    {% endblock scripts %}
+
+    {% include 'starApp/inc/footer.html' %}
+    

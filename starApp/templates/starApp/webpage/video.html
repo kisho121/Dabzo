@@ -1,0 +1,105 @@
+{% extends 'starApp/layouts/main.html' %}
+{% load static %}
+
+{% block title %}
+Video Category
+{% endblock title %}
+
+ 
+{% block content %}
+
+
+<div class="contain-body">
+
+    <div class="row sidebar">
+        <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+            {% include 'starApp/inc/menu.html' %}   
+        </div>
+        <div class="main-content col-10 col-sm-10 col-md-10 col-lg-11">
+            <div class="carousel" data-flickity='{"wrapAround": true, "autoPlay": 5000}'>
+                {% for swapping in swap %}
+                <div class="carousel-cell">
+                    <img src="{{ swapping.thumb_image.url }}" alt="{{ swapping.thumb_text }}">
+                </div> 
+                {% endfor %}
+            </div>
+            <div class="px-0 mx-0" style="background-color:  #021526;">
+                <h2 class="container-fluid pt-4 mb-0 pb-0 text-center " style="font-weight: 900; text-shadow:1px 1px 1px white; color:white; text-transform: uppercase;" >select Language</h2>
+
+                <div class="container-fluid mt-0">
+                    <div class="row mb-2" >
+                        {% for item in videos %}
+                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 my-0 py-2 langBox mx-0 " style="background-color:  #021526;">
+                            <div class="card my-2 videoBox h-100 rounded-2  "  style="background-color: {% cycle 'orange' 'aqua' 'violet'  %};">
+                                <a href="{% url 'movies' item.videoName %}" class="card-link text-decoration-none">
+                                    <img class="card-img-top cardimage ms-lg-5 ms-md-4 ms-sm-3 ms-3 mt-lg-5 mt-md-4 mt-sm-3 ms-3 rounded-2 p-1 mt-3 " style="max-width: 33%; height: 40px" src="{{ item.videoImage.url }}" alt="{{item.MusicName}}" />
+                                    
+                                    <div class="card-body  ">
+                                        <h4 class="textLang text-light text-center pt-lg-3 pt-md-2 pt-sm-1" >{{ item.videoName }}</h4>
+                                    </div>
+                                </a>
+                            </div>                   
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- <div class="container-fluid mx-0 px-0 rounded-3 mt-4">
+                <div class="row m-0 p-0" style="background-color: #120624;">
+                    <h2 class="text-center text-light fw-bolder " style="text-shadow: 1px 1px 1px white; letter-spacing: 2px;" >POPULAR</h2>
+                    {% for stream in likes %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 my-2">
+                        <div class="card text-start  play-card">
+                            <a class="link" href="{% url 'stream' stream.videotitle.videomodel.videoName stream.videotitle.categorytitle stream.subtitle %}">
+                                <img class="card-img-top imagine justify-content-center" src="{{ stream.videothumbnail.url }}"  alt="Title"  />
+                                <div class="card-body m-0 p-0">
+                                    <h5 class="card-title p-0 m-0 cardfooter">{{ stream.subtitle }}</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div> -->
+             <div class="container-fluid px-0 mx-0 mt-3 rounded-3" style="background-color: #030423;">
+
+                        <div class="row m-0 p-0">
+                    <h2 class="text-center text-light fw-bolder py-3 " style="text-shadow: 1px 1px 1px white; letter-spacing: 2px;" >POPULAR</h2>
+                            {% for stream in likes %}
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 px-lg-1 my-0">
+                                <div class="text-start play-card h-75 ">
+                            <a class="link" href="{% url 'stream' stream.videotitle.videomodel.videoName stream.videotitle.categorytitle stream.subtitle %}">
+                                        <img class="card-img-top playcardimg" style="object-fit: cover; height: 88%;" src="{{ stream.videothumbnail.url }}"  alt="Title" />
+                                        <div class="m-0 px-0 ">
+                                            <h5 class="card-title cardfooter text-light ">{{ stream.subtitle }}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                    </div>
+            <!-- <div class="container cards">
+                <div class="row bg-secondary">
+                   {% for item in collectionlist %}
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 w-2">
+                        <div class="card my-2">
+                        <a href="#" class="card-link">
+                            <img src="{{ item.Image.url }}" alt="{{ item.Name }}" class="card-img-top imagine ">
+                            </a>
+                        
+                            <h3 class="card-title text-light py-0" >{{ item.Name }}</h3>
+                            
+                        </div>
+                    </div>
+                   {% endfor %}
+                </div>
+            </div> -->
+            {% include 'starApp/inc/footer.html' %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
