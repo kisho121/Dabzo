@@ -9,11 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os
+
 from logging import config
 from pathlib import Path
 from decouple import config
-from django.core.management import execute_from_command_line
+
 
 
 
@@ -111,9 +111,6 @@ DATABASES = {
 }
 
 
-if __name__ == "__main__":
-    port = os.getenv('PORT', '5432')  # Use the port Render provides or default to 8000
-    execute_from_command_line(['manage.py', 'runserver', '0.0.0.0:' + port])
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
