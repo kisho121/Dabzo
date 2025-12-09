@@ -218,7 +218,7 @@ def musicView(request):
         "is_authenticated": request.user.is_authenticated,  # For template checks
     }
     
-    return render(request, 'starApp/webpage/Audio.html', context)
+    return render(request, 'starApp/webpage/audio.html', context)
 
 
 # ============ UPDATED toggle_favourite - LOGIN REQUIRED ============
@@ -393,7 +393,7 @@ def SpeedTestView(request):
     return render(request, 'starApp/webpage/speedtest.html')
 
 def AboutView(request):
-    return render(request, 'starApp/webpage/About.html')
+    return render(request, 'starApp/webpage/about.html')
 
 def PrivacyViews(request):
     return render(request, 'starApp/webpage/privacy.html')
@@ -427,3 +427,14 @@ def myPlaylistView(request):
         'total_count': wishlist_songs.count()
     }
     return render(request, 'starApp/webpage/myPlaylist.html', context)
+
+def make_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="kishoor121@gmail.com",
+            password="Admin@123"
+        )
+        return HttpResponse("Admin user created successfully!")
+    else:
+        return HttpResponse("Admin user already exists!")
