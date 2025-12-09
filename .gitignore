@@ -1,7 +1,7 @@
 # Django
 __pycache__/
 *.py[cod]
-*.sqlite3
+
 
 # Local settings
 .env
