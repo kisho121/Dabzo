@@ -25,6 +25,6 @@ urlpatterns = [
     path('profile',views.profileView,name="profile"),
     path('toggle-favourite/', views.toggle_favourite, name='toggle_favourite'),
     path('myPlaylist', views.myPlaylistView, name='myPlaylist'),
-    path('make-admin', views.make_admin, name ='make_admin'),
+    
    
 ]

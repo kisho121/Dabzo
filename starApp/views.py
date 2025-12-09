@@ -428,13 +428,3 @@ def myPlaylistView(request):
     }
     return render(request, 'starApp/webpage/myPlaylist.html', context)
 
-def make_admin(request):
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="kishoor",
-            email="kishoor121@gmail.com",
-            password="kish@123"
-        )
-        return HttpResponse("Admin user created successfully!")
-    else:
-        return HttpResponse("Admin user already exists!")
