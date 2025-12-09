@@ -1,21 +1,53 @@
-{% for msg in messages %}
-<div class="alert alert-dismissible alert-success container text-light show fade w-50 " id="alert-control" style="position: absolute; background-color:green; right:0%">
-    {{msg}}
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+{% if messages %}
+<div class="message-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px;">
+  {% for msg in messages %}
+    {% if msg.level == DEFAULT_MESSAGE_LEVELS.ERROR or msg.level == 40 %}
+      <div class="alert alert-dismissible alert-danger text-white show fade mb-2 alert-control" style="background-color: #dc3545; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <i class="bi bi-x-circle-fill me-2"></i>
+        {{ msg }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    {% elif msg.level == DEFAULT_MESSAGE_LEVELS.WARNING or msg.level == 30 %}
+      <div class="alert alert-dismissible alert-warning text-dark show fade mb-2 alert-control" style="background-color: #ffc107; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ msg }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    {% elif msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS or msg.level == 25 %}
+      <div class="alert alert-dismissible alert-success text-white show fade mb-2 alert-control" style="background-color: #28a745; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {{ msg }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    {% elif msg.level == DEFAULT_MESSAGE_LEVELS.INFO or msg.level == 20 %}
+      <div class="alert alert-dismissible alert-info text-white show fade mb-2 alert-control" style="background-color: #17a2b8; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <i class="bi bi-info-circle-fill me-2"></i>
+        {{ msg }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    {% else %}
+      <div class="alert alert-dismissible alert-secondary text-white show fade mb-2 alert-control" style="background-color: #6c757d; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <i class="bi bi-chat-dots-fill me-2"></i>
+        {{ msg }}
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></button>
+      </div>
+    {% endif %}
+  {% endfor %}
 </div>
 
-{% endfor %}
-
-{% block scripts %}
-
 <script>
-    setTimeout(function(){
-        let alert=document.getElementById('alert-control')
-        
-        if(alert){
-            alert.style.display='none';
+  // Auto-dismiss alerts after 4 seconds
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      const alerts = document.querySelectorAll('.alert-control');
+      alerts.forEach(function(alert) {
+        if (alert) {
+          // Use Bootstrap's native alert close method
+          const bsAlert = new bootstrap.Alert(alert);
+          bsAlert.close();
         }
-    },2000);
+      });
+    }, 4000);
+  });
 </script>
-
-{% endblock scripts %}
+{% endif %}

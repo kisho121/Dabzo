@@ -12,13 +12,13 @@ Login|TrumpKart
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
-<div class="bg-login pb-4" style="background-color: #021526;">
+<div class="container-fluid pb-4 m-0 p-0" style="background-color: #021526;">
 {% include 'starApp/inc/messages.html' %}
 <div class="container-fluid d-flex justify-content-between mb-0 pb-0">
        
-        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
+        <img class="float-start mt-1 playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="80px" >
         <div class="">
-            <h2 class="fw-bolder text-center" style="text-shadow: 1px 1px 1px white !important; color: white; font-family: serif;">
+            <h2 class="fw-bolder text-center playerLogoText" style="text-shadow: 1px 1px 1px white !important; color: white; font-family: serif;">
                LOGIN
             </h2>
         <!-- <p class=" text-info text-center my-0 py-0 ">( {{ total_count }} song{{ total_count|pluralize }} )</p> -->
@@ -37,20 +37,23 @@ Login|TrumpKart
                   <form method="POST" action="">
                    {% csrf_token %}
                    <div class="mb-2">
-                      <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Username</label>
-                      <input type="text" name="username" id="username" class="form-control" placeholder="Enter your Username">
+                      <label for="" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Username</label>
+                      <input type="text" name="username" id="username" class="form-control" placeholder="Enter your Username" required>
                       
                      </div>
   
                     <div class="mb-2">
-                     <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Password</label>
-                     <input type="password" name="password" id="password" class="form-control" placeholder="Enter your Password">
-                     <input id="see" type="checkbox">
-                     
+                     <label for="" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Password</label>
+                     <div class="input-group">
+                       <input type="password" name="password" id="password" class="form-control" placeholder="Enter your Password" required>
+                       <button class="btn btn-outline-white bg-white" type="button" id="togglePassword" style="border-left: none;">
+                         <i class="bi bi-eye text-black fs-6" id="eyeIcon"></i>
+                       </button>
+                     </div>
                  </div>
                  <button type="submit" class="btn btn-success fw-bold rounded-2">Login</button>
 
-                  <a class="text-white text-decoration-none" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a> <br>
+                  <a class="text-light small text-decoration-none" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a> <br>
                   <p style="font-family: serif;">
                       Create New Account 
                       <a href="{% url 'account_signup' %}" class="btn btn-primary fw-bold">Sign up</a>
@@ -73,7 +76,7 @@ Login|TrumpKart
     {% get_providers as socialaccount_providers %}
 
     {% if socialaccount_providers %}
-    <p class="m-0" style="font-family: serif;">Please sign in with one
+    <p class="m-0 small" style="font-family: serif;">Please sign in with one
     of your existing third party accounts.</p>
 
     <div class="socialaccount_ballot">
@@ -95,9 +98,20 @@ Login|TrumpKart
 {% endblock %}
 {% block scripts %}
 <script>
-  document.getElementById('see').addEventListener('change',function(){
-    let checkbox =document.getElementById('password');
-    checkbox.type= this.checked ? 'text': 'password';
+  // Password visibility toggle
+  document.getElementById('togglePassword').addEventListener('click', function() {
+    const passwordField = document.getElementById('password');
+    const eyeIcon = document.getElementById('eyeIcon');
+    
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      eyeIcon.classList.remove('bi-eye');
+      eyeIcon.classList.add('bi-eye-slash');
+    } else {
+      passwordField.type = 'password';
+      eyeIcon.classList.remove('bi-eye-slash');
+      eyeIcon.classList.add('bi-eye');
+    }
   });
 </script>
 {% endblock scripts %}

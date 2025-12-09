@@ -35,7 +35,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
 # Application definition
 
 INSTALLED_APPS = [
-    #'jazzmin',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sites',
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google', 
     'allauth.socialaccount.providers.facebook',
-    #'debug_toolbar',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +65,7 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
     
 
-    #'debug_toolbar.middleware.DebugToolbarMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     
 ]
 
@@ -89,9 +89,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'spotstar.wsgi.application'
 
+# settings.py
 
+STATICFILES_IGNORE_PATTERNS = [
+    # These ignore patterns target the files coming from the jazzmin app's static directory
+    'admin/js/cancel.js',
+    'admin/js/popup_response.js',
+]
+
+# Note: You may also want to fix the 'djdt' warning (URL namespace) while you are here,
+# by ensuring your settings are correct for the Django Debug Toolbar.
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+# SILENCED_SYSTEM_CHECKS = ['models.W036']
 
 #DATABASES = {
  #   'default': {
@@ -217,6 +227,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'kishoor121@gmail.com'
-EMAIL_HOST_PASSWORD = 'wkuc omlz qltc nshb'
+EMAIL_HOST_PASSWORD = 'gfxh ocmj exzx irjw'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

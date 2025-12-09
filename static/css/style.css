@@ -314,7 +314,7 @@ i{
     top: 0%;
     margin: auto;
     background-position: center;
-    width: 95%;
+    width: 96%;
   }
   i{
     color: white; 
@@ -352,24 +352,39 @@ li.nav-item:hover span{
   margin-bottom: 0%;
 }
 
-h1.home-display{
-  margin-top: 20px;
-  font-family: serif;
-  z-index: 5;
-  font-size: 3.6vw;
-  font-weight: 900;
-  width: 100%;
-  color: white;
-  text-shadow: 1px 1px 2px white;
-  position: absolute;
-  transform: translate(-50%,-500%);
-  left: 50%; 
+.playerLogo{
+  width: 100px !important;
  
+ }
+  .playerLogoText{
+    margin-top: 8px;
+    font-size: 1.8vw !important;
+  }
+
+.homeLogo{
+  top: 10px; 
+  left: 10px;  
+  z-index: 10;
+  width: 10vw;
+  height: auto;
 }
 
-div.mid-content{
+h1.home-display{
+  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 3rem;
+  text-shadow: 2px 2px 5px black;
+  z-index: 10;
+  font-family: serif;
+
+} 
+
+/* div.mid-content{
   margin-top: -10vh;
-}
+} */
 .card-img-top{
   height: auto;
 }
@@ -758,8 +773,7 @@ a.link{
 .authBox{
   box-shadow: 1px 1px 3px 3px aqua;
   margin: auto;
-  margin-top: 60px !important;
-  margin-bottom: 20px;
+  
   width: 25%  !important;
 }
 .song-list {
@@ -848,8 +862,15 @@ p.listItem{
 .popularity-bar {
     width: 50px !important;
 }
+.homeLogo{
+  top: 5px; 
+  left: 5px; 
+  width: 12vw;
+  height: auto;
+}
 h1.home-display{
   width: 100%;
+ font-size: 2.5rem ;
 }
 .sectionBoxText{
   font-size: 1.7vw;
@@ -942,8 +963,16 @@ p.listItem{
 .popularity-bar {
     width: 40px !important;
 }
+.homeLogo{
+  top: 0px; 
+  left: 0px; 
+  width: 12vw;
+  height: auto;
+}
 h1.home-display{
   width: 100%;
+  font-size: 2.2rem;
+  
 }
 iframe{
    border-radius: 0%;
@@ -978,12 +1007,12 @@ iframe{
   img.logo{
     width: 18%;
   }
-  .loginPic{
+  /* .loginPic{
     width: 30%;
     height: 30%;
-  }
+  } */
   .textLang{
-    font-size: 6vw ;
+    font-size: 5vw ;
     font-weight: 600;
   }
   .caro-img{
@@ -1038,18 +1067,23 @@ iframe{
   font-size: 3vw;
   font-weight: 100;
 }
+.homeLogo{
+  width: 25vw;
+  height: auto;
+}
 h1.home-display{
-  margin-top: 120px;
+  
   width: 100%;
   text-shadow: none;
-  font-size: 6vw;
+  font-size: 2rem;
+  
 }
 h1.title-content{
-  font-size: 4.8vw;
+  font-size: 4.5vw;
   margin-bottom: 4%;
 }
 h1.title-content-2{
-  font-size: 4.8vw;
+  font-size: 4.5vw;
   margin-bottom: 4%;
 }
 p.listItem{
@@ -1143,9 +1177,13 @@ iframe{
   width: 200px !important;
  } */
  .playerLogo{
-  width: 80Px !important;
-  height: 50px !important;
+  width: 70Px !important;
+ 
  }
+  .playerLogoText{
+    margin-top: 8px;
+    font-size: 4.5vw !important;
+  }
  .number-circle, 
  .rank-badge.third-place,
   .rank-badge.runner-up,

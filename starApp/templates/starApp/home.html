@@ -10,23 +10,37 @@ Home
 
 {% include 'starApp/inc/messages.html' %}
 
+<div class="container-fluid mx-auto row mid-content m-0 p-0">
+  <div class="container-fluid position-relative p-0 m-0" style="height: 90vh;">
+    
+    <!-- Background Image -->
+    <img
+        src="{% static 'images/HomeBg.jpg' %}"
+        class="w-100 h-100 object-fit-cover"
+        style="border-radius: 0;"
+        alt=""
+    />
+
+    <!-- Logo (Top Left) -->
+    <img 
+        src="{% static 'images/favicon.png' %}" 
+        class="position-absolute homeLogo"
+        style="top: 20px; left: 20px;  z-index: 10;"
+        alt=""
+    >
+
+    <!-- Centered Text -->
+    <h1 class="position-absolute text-center home-display fw-bold w-100"
+        >
+        Listen and Watch music, <br> movies, TV shows for Free..
+    </h1>
+
+</div>
+
 
   
-
- <!-- <video class="video-background" src="{% static 'videos/BGPLAY.mp4' %}" autopla loop muted></video> -->
-  <img
-    src="{% static 'images/HomeBg.jpg' %}"
-    class="img-fluid rounded-top opacity-100"
-    alt=""
-  />
-  {% include 'starApp/inc/header.html' %}
-  
-  <h1 class="container-fluid home-display text-center">Listen and Watch music, <br> movies, TV shows for Free..</h1>
-
-
-<div class="container-fluid mx-auto row pb-2 mid-content ">
      
-   <div class="authBox rounded-2 py-3 bg-info" style="border: 0.5px solid aqua;">
+   <div class="authBox rounded-2 py-2 bg-info my-3" style="border: 0.5px solid aqua;">
         {% if request.user.is_authenticated %}
         <!-- <h4 class="display text-secondary text-center">Welcome Back !! </h4>  -->
         <div class="d-flex justify-content-center" >
@@ -46,7 +60,7 @@ Home
         
 
         {% else %}
-        <h2 class="welcomeText1 text-white text-center fw-bolder">Hello Guest!!</h2>
+        <h2 class="welcomeText1 text-white text-center fw-bolder">Let’s tune in!</h2>
         <p class="welcomeText2 text-black text-center fw-bold" style="font-family: serif;">Please Signup or login to continue..</p>
 
         <a class="auth-link " href="{% url 'account_login' %}">
@@ -58,13 +72,15 @@ Home
         <a class="auth-link" href="{% url 'account_signup' %}" >
         <button id="register-btn" class="btn btn-warning text-black text-center mb-3" style="width: 130px; box-shadow: 1px 1px 5px 5px rgb(239, 239, 52);" ><i class="bi bi-person-add fs-5 text-black"></i> Register</button>
         </a>
+        <p class="welcomeText2 text-black text-center fw-bold" style="font-family: serif;">Register and Enjoy More features..</p>
+
         {% endif %}
         </div> 
         
 
   
-        <div class="container-fluid my-3 cltn py-4 " style="background-color: rgb(0, 0, 49);">
-          <div class="row">
+        <div class="container-fluid my-3 cltn" >
+          <div class="row m-1 py-5" style="background-color: rgb(0, 0, 30);">
            
             <div class="col-12 col-sm-12 col-md-8 col-lg-9 audio-content">
                <h1 class="title-content pb-1 fw-bolder" >Enjoy Unlimited Music on the Go..</h1>
@@ -73,38 +89,27 @@ Home
             </div>
           
             <div class="col-12 col-sm-12 col-md-4 col-lg-3 mx-auto text-center">
-              {% if request.user.is_authenticated %}
-              <a href="{% url 'audio' %}"><img class="custom-icon rounded-3"  src="{% static 'images/music.jpg' %}" alt="music" ></a>
-              {% else %}
               
-              <button class="ciButton" onclick="alertAudioFunction()"><img class="custom-icon rounded " src="{% static 'images/music.jpg' %}" alt="music" ></button> <br>
-               <div id="audioAlert" class="text-warning mt-4" ></div>
-               {% endif %}
+              <a href="{% url 'audio' %}"><img class="custom-icon rounded-3"  src="{% static 'images/music.jpg' %}" alt="music" ></a>
+             
+              
             </div>
           </div>
         </div>
 
-        <hr class="bg-white my-2 ">
 
-        <div class="container-fluid my-3 mx-auto cltn px-md-5 py-4" style="background-color: rgb(0, 0, 49);" >
-           <div class="row">
+        <div class="container-fluid my-3 cltn " >
+           <div class="row m-1 py-5" style="background-color: rgb(1, 1, 30);">
                  <div class="col-12 col-sm-12 col-md-4 col-lg-4 coverBox d-flex flex-column justify-content-center align-items-center text-center" >
-                  {% if request.user.is_authenticated %}
                     <a href="{% url 'video' %}"><video class="video-icon" src="{% static 'videos/video.mp4' %}" autoplay loop muted></video></a>
-                  {% else %}
-                    <button onclick="alertVideoFunction()"><video class="video-icon" src="{% static 'videos/video.mp4' %}" autopla loop muted></video></button>
                     
-                    <div id="videoAlert" class="text-warning mt-4"></div>
-                  {% endif %}
                  </div>
                  <div class="col-12 col-sm-12 col-md-8 col-lg-8  d-flex flex-column justify-content-center align-items-end text-end">
                   
                      <h1 class="h1 title-content-2 fw-bolder pb-1 pt-3 ">Watch Everything and Everywhere..</h1>
                      <p class="listItem pt-3  ">Movies, Tv shows and Video Songs. </p>
                     <p class="listItem pt-3 ">Best Online Streaming platform !</p>
-                    
 
-                  
                    
                  </div>
            </div>

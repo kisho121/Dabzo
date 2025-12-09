@@ -1,18 +1,33 @@
 {% extends 'starApp/layouts/main.html' %}
-
+{% load static %}
 {% block title %}
 Otp Verification
 {% endblock title %}
 
 {% block content %}
-<h3 class="text-center text-secondary py-2 fw-bold">OTP Verification</h3>
-{% include 'starApp/inc/header.html' %}
+<div class="container-fluid pb-4 m-0 p-0" style="background-color: #021526; ">
+
 {% include 'starApp/inc/messages.html' %}
+<div class="container-fluid d-flex justify-content-between mb-0 pb-0">
+       
+        <img class="float-start mt-1 playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="80px" >
+        <div class="">
+            <h2 class="fw-bolder text-center playerLogoText" style="text-shadow: 1px 1px 1px white !important; color: white; font-family: serif;">
+               LOGIN
+            </h2>
+        <!-- <p class=" text-info text-center my-0 py-0 ">( {{ total_count }} song{{ total_count|pluralize }} )</p> -->
+            
+        </div>
+        <div class="float-end" >
+            <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
+            <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
+        </div>
 
+    </div>
 
-    <div class="row">
-    <div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto bg-light ">
-        <h5 class="fw-bold text-center">Please Enter your OTP:</h5>
+    <div class="row" >
+    <div class="col-10 col-sm-8 col-md-6 col-lg-4 mx-auto bg-info py-2 my-4 rounded-3">
+        <h5 class="fw-bolder text-center text-black">Please Enter your OTP:</h5>
         <form method="POST" >
             {% csrf_token %}
            
@@ -20,15 +35,16 @@ Otp Verification
             <button class="btn btn-primary mb-2" type="submit">Verify OTP</button>
         </form>
          
-        <form method="POST" >
+        <form method="POST">
             {% csrf_token %}
-           
-            <input class="form-control" type="hidden"  value="{{form.email}}" ><br>
-            <button class="btn btn-danger mb-2" type="submit">Resent OTP</button>
+            <input type="hidden" name="email" value="{{ email }}">
+            <button class="btn btn-danger mb-2" type="submit" name="resend">Resend OTP</button>
         </form>
+
     </div>
 </div>
-
+</div>
+{% include 'starApp/inc/footer.html' %}
 
 
 {% endblock content %}

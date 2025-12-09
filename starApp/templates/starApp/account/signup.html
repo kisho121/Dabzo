@@ -9,13 +9,13 @@ Register|SpotStar
 {% endblock title %}
 
 {% block content %}
-<div class="bg-register pb-4" style="background-color: #021526;">
+<div class="container-fluid bg-register  m-0 px-0 pb-3" style="background-color: #021526;">
     {% include 'starApp/inc/messages.html' %}
-<div class="container-fluid d-flex justify-content-between mb-0 pb-0">
+<div class="container-fluid d-flex justify-content-between mx-0 pt-1 mb-2 pb-0">
        
-        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
+        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo"  >
         <div class="">
-            <h2 class="fw-bolder text-center" style="text-shadow: 1px 1px 1px white !important; color: white; font-family: serif;">
+            <h2 class="fw-bolder text-center playerLogoText" style="text-shadow: 1px 1px 1px white !important; color: white; font-family: serif;">
                 REGISTER 
             </h2>
         <!-- <p class=" text-info text-center my-0 py-0 ">( {{ total_count }} song{{ total_count|pluralize }} )</p> -->
@@ -28,93 +28,110 @@ Register|SpotStar
 
     </div>
 
-    <div class="container col-10 col-sm-10 col-md-6 col-lg-4 px-5 pb-3 register rounded-3" style="background-color: #00B7B5;">
+    <div class="container col-10 col-sm-10 col-md-6 col-lg-4 px-5 pb-2 register rounded-3" style="background-color: #00B7B5;">
         <section class="pt-2 mb-2 ">
            
             <form method="POST" enctype="multipart/form-data" action="#">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="UserName" class="form-label text-white fw-bolder" style="font-family: serif;">Username <sup class="text-danger">*</sup></label>
+                    <label for="UserName" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Username <sup class="text-white">*</sup></label>
                     {{ form.username }}
+                    {% if form.errors.username %}
+                    <div class="alert alert-danger mt-2 py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        {{ form.errors.username|striptags }}
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="mb-3">
-                    <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Email</label>
+                    <label for="" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Email <sup class="text-white">*</sup></label>
                     {{ form.email }}
+                    {% if form.errors.email %}
+                    <div class="alert alert-danger mt-2 py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        {{ form.errors.email|striptags }}
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="mb-3">
-                    <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Date Of Birth</label>
+                    <label for="{{ form.dateOfBirth.id_for_label }}" class="form-label">Date of Birth</label>
                     {{ form.dateOfBirth }}
+                    <div class="form-text">You must be at least 15 years old to register</div>
+                    {% if form.dateOfBirth.errors %}
+                        <div class="text-danger small">{{ form.dateOfBirth.errors }}</div>
+                    {% endif %}
                 </div>
                 <div class="mb-3">
-                    <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Profile Picture</label>
+                    <label for="" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Profile Picture</label>
                     {{ form.profilePicture }}
+                    {% if form.errors.profilePicture %}
+                    <div class="alert alert-danger mt-2 py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        {{ form.errors.profilePicture|striptags }}
+                    </div>
+                    {% endif %}
                 </div>
                 
                 <div class="mb-3">
-                    <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Password</label>
-                    {{ form.password1 }}
-                    <input type="checkbox" id="showpwd1">
+                    <label for="" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Password <sup class="text-white">*</sup></label>
+                    <div class="input-group">
+                        {{ form.password1 }}
+                        <button class="btn btn-outline-white bg-white" type="button" id="togglePassword1" style="border-left: none;">
+                            <i class="bi bi-eye text-dark fs-6" id="eyeIcon1"></i>
+                        </button>
+                    </div>
+                    {% if form.errors.password1 %}
+                    <div class="alert alert-danger mt-2 py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        {{ form.errors.password1|striptags }}
+                    </div>
+                    {% endif %}
                 </div>
     
                 <div class="mb-3">
-                    <label for="" class="form-label text-white fw-bolder" style="font-family: serif;">Conform Password</label>
-                    {{ form.password2 }}
-                    <input type="checkbox" id="showpwd2">
-                </div>
-                <div class="mb-1">
-                    
-                    
+                    <label for="" class="form-label text-white fw-bolder fs-5" style="font-family: serif;">Confirm Password <sup class="text-white">*</sup></label>
+                    <div class="input-group">
+                        {{ form.password2 }}
+                        <button class="btn btn-outline-white bg-white" type="button" id="togglePassword2" style="border-left: none;">
+                            <i class="bi bi-eye text-dark fs-6" id="eyeIcon2"></i>
+                        </button>
+                    </div>
+                    {% if form.errors.password2 %}
+                    <div class="alert alert-danger mt-2 py-2 small" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        {{ form.errors.password2|striptags }}
+                    </div>
+                    {% endif %}
                 </div>
                 
-                    <button type="submit" class="btn btn-success fw-bolder rounded-2">Submit</button>
+                <!-- Display non-field errors if any -->
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger py-2 small" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    {{ form.non_field_errors|striptags }}
+                </div>
+                {% endif %}
+                
+                <button type="submit" class="btn btn-success fw-bolder rounded-2">Submit</button>
                 
             </form>
-            <div class="my-2 rounded-2 px-1" style="border: 1px solid black;">
-                <h5 class="fw-bolder">Note*</h5>
-                 <li class="text-black text-wrap py-0 my-0 small list-unstyled">Minimum 8 characters</li>
-                 <li class="text-black text-wrap py-0 my-0 small list-unstyled">Use a combination of uppercase (A–Z), lowercase (a–z), digits (0–9), and special characters (! @ # $ %)</li>
-
+            <div class="my-2 rounded-2 px-2 py-2" style="border: 1px solid black; background-color: rgba(255,255,255,0.1);">
+                <h5 class="fw-bolder text-white mb-2"><i class="bi bi-info-circle-fill me-2"></i>Password Requirements</h5>
+                 <ul class="text-white mb-0 ps-3">
+                     <li class="small">Minimum 8 characters</li>
+                     <li class="small">Use a combination of uppercase (A–Z), lowercase (a–z), digits (0–9), and special characters (! @ # $ %)</li>
+                     <li class="small">Password should not be same as Username or Email</li>
+                 </ul>
             </div>
              
                 
-                <p class="my-2 fw-bold">Already an user?? <a class="fs-4 fw-bold ms-2" href="{% url 'account_login' %}"> <button class="btn btn-primary rounded-2  fw-bolder">Login</button></a></p>
+            <p class="my-2 fw-bold">Already an user?? <a class="fs-4 fw-bold ms-2" href="{% url 'account_login' %}"> <button class="btn btn-primary rounded-2  fw-bolder">Login</button></a></p>
                
-            
-
-            <div class="col-md-6 col-sm-12">
-              
-                <div class="mb-2">
-                    
-                     {% if form.errors.username %}
-                     <label class="text-danger bg-white fs-6 rounded-2" for="">{{ form.errors.username }}</label>
-                     {% endif %}
-                </div>
-                    
-                <div class="mb-2">
-                   
-                    {% if form.errors.email %}
-                    <label class="text-danger bg-white fs-6 rounded-2" for="">{{ form.errors.email }}</label>
-                    {% endif %}
-                </div>
-
-                <div class="mb-2">
-                    
-                    {% if form.errors.password1 %}
-                    <label class="text-danger bg-white fs-6 rounded-2 w-100" for="">{{ form.errors.password1 }}</label>
-                    {% endif %}
-                </div>
-
-                <div class="mb-2">
-                   
-                    {% if form.errors.password2 %}
-                    <label class="text-danger bg-white fs-6 rounded-2 w-100" for="">{{ form.errors.password2 }}</label>
-                    {% endif %}
-                </div>
         </section>
     
     <div class="login-or  my-3 text-dark text-center">{% trans 'OR' %}</div>
 
-    <div class="text-center container ">
+    <div class="text-center ">
       <div class="socialaccount_providers">
         {% include "starApp/socialaccount/snippets/provider_list.html" with process="login" %}
       </div>
@@ -122,7 +139,7 @@ Register|SpotStar
       {% get_providers as socialaccount_providers %}
   
       {% if socialaccount_providers %}
-      <p class="m-0">Please sign in with one
+      <p class="m-0 small">Please sign in with one
       of your existing third party accounts.</p>
   
       <div class="socialaccount_ballot">
@@ -148,14 +165,45 @@ Register|SpotStar
 {% endblock %}
 {% block scripts %}
 <script>
-    document.getElementById('showpwd1').addEventListener('change', function(){
-        var passwordfield = document.querySelector('input[name="password1"]');
-        passwordfield.type = this.checked ? 'text': 'password';
+    // Password visibility toggle for password1
+    document.getElementById('togglePassword1').addEventListener('click', function() {
+        const passwordField = document.querySelector('input[name="password1"]');
+        const eyeIcon = document.getElementById('eyeIcon1');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.classList.remove('bi-eye');
+            eyeIcon.classList.add('bi-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.classList.remove('bi-eye-slash');
+            eyeIcon.classList.add('bi-eye');
+        }
     });
 
-    document.getElementById('showpwd2').addEventListener('change', function(){
-        var passwordfield = document.querySelector('input[name="password2"]');
-        passwordfield.type = this.checked ? 'text': 'password';
+    // Password visibility toggle for password2
+    document.getElementById('togglePassword2').addEventListener('click', function() {
+        const passwordField = document.querySelector('input[name="password2"]');
+        const eyeIcon = document.getElementById('eyeIcon2');
+        
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.classList.remove('bi-eye');
+            eyeIcon.classList.add('bi-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.classList.remove('bi-eye-slash');
+            eyeIcon.classList.add('bi-eye');
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const dobInput = document.querySelector('input[type="date"]');
+        if (dobInput) {
+            const today = new Date();
+            const fifteenYearsAgo = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate());
+            const maxDate = fifteenYearsAgo.toISOString().split('T')[0];
+            dobInput.setAttribute('max', maxDate);
+        }
     });
 </script>
 {% endblock scripts %}

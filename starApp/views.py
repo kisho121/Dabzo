@@ -13,6 +13,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count  
+from datetime import date, timedelta
 
 
 
@@ -57,46 +58,127 @@ def sent_otp(email, otp):
     recipient_list = [email]
     send_mail(subject, message, email_from, recipient_list)    
 
+def calculate_age(birth_date):
+    """Calculate age from date of birth"""
+    today = date.today()
+    age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+    return age
+
 def registerpage(request):
     if request.method == 'POST':
         form = formCreation(request.POST, request.FILES)
+        
+        # Get email and dateOfBirth from POST data
+        email = request.POST.get('email')
+        dateOfBirth = request.POST.get('dateOfBirth')
+        
+        # Check if email already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'This email is already registered. Please use a different email or login.')
+            return render(request, 'starApp/account/signup.html', {'form': form})
+        
+        # Validate age (must be 15+)
+        if dateOfBirth:
+            try:
+                from datetime import datetime
+                dob = datetime.strptime(dateOfBirth, '%Y-%m-%d').date()
+                age = calculate_age(dob)
+                
+                if age < 15:
+                    messages.error(request, 'You must be at least 15 years old to register.')
+                    return render(request, 'starApp/account/signup.html', {'form': form})
+                    
+            except ValueError:
+                messages.error(request, 'Invalid date format. Please select a valid date of birth.')
+                return render(request, 'starApp/account/signup.html', {'form': form})
+        else:
+            messages.error(request, 'Date of birth is required.')
+            return render(request, 'starApp/account/signup.html', {'form': form})
+        
         if form.is_valid():
-            user=form.save(commit =False)
+            user = form.save(commit=False)
             user.is_active = False
             user.save()
 
-            UserProfile.objects.create( 
-                user=user, dateOfBirth=form.cleaned_data['dateOfBirth'], 
-                profilePicture=form.cleaned_data.get('profilePicture'), )
+            UserProfile.objects.create(
+                user=user, 
+                dateOfBirth=form.cleaned_data['dateOfBirth'], 
+                profilePicture=form.cleaned_data.get('profilePicture'),
+            )
 
-            otp =random.randint(100000,999999)
-            OTPVerification.objects.create(user=user, otp =otp)
+            otp = random.randint(100000, 999999)
+            OTPVerification.objects.create(user=user, otp=otp)
             sent_otp(user.email, otp)
+            
+            messages.success(request, 'Registration successful! Please verify your email with the OTP sent.')
             return redirect(reverse('otp_verification') + f'?email={user.email}')
+        else:
+            # Display form errors
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f'{error}')
     else:
         form = formCreation()
-    return render(request,'starApp/account/signup.html',{'form':form})
-
+    
+    # Calculate max date (15 years ago from today) for date picker
+    max_date = date.today() - timedelta(days=15*365)
+    
+    context = {
+        'form': form,
+        'max_date': max_date.strftime('%Y-%m-%d')
+    }
+    return render(request, 'starApp/account/signup.html', context)
 
 def otp_verification(request):
     email = request.GET.get('email')
+
+    if not email:
+        messages.error(request, "Invalid request!")
+        return redirect('account_login')
+
+    # fetch first user with this email
+    user = User.objects.filter(email=email).first()
+    if not user:
+        messages.error(request, "User not found!")
+        return redirect('account_login')
+
     if request.method == 'POST':
-        otp = request.POST.get('otp')
+
+        # RESEND OTP
+        if 'resend' in request.POST:
+
+            # delete old OTPs
+            OTPVerification.objects.filter(user=user).delete()
+
+            new_otp = random.randint(100000, 999999)
+
+            OTPVerification.objects.create(user=user, otp=new_otp)
+            sent_otp(email, new_otp)
+
+            messages.success(request, "OTP resent successfully!")
+            return redirect(reverse('otp_verification') + f'?email={email}')
+
+        # VERIFY OTP
+        otp_entered = request.POST.get('otp')
+
         try:
-            user_otp = OTPVerification.objects.get(user__email=email, otp=otp)
-            user = user_otp.user
+            user_otp = OTPVerification.objects.get(user=user, otp=otp_entered)
+
             user.is_active = True
             user.save()
-            user_otp.delete()  # OTP is used, so delete it
-            messages.success(request, "Registration successfull> Login Now..")
+
+            user_otp.delete()
+
+            messages.success(request, "Registration successful!")
             return redirect('account_login')
+
         except OTPVerification.DoesNotExist:
-            messages.error(request, 'Invalid OTP. Please try again.')
+            messages.error(request, "Invalid OTP! Try again.")
+
     return render(request, 'starApp/otp_verification.html', {'email': email})
 
-# ============ UPDATED musicView FUNCTION ============
-from django.db.models import Count
 
+# ============ UPDATED musicView FUNCTION - NO AUTH REQUIRED ============
 def musicView(request):
     slides = carousel.objects.all()
     music = MusicModel.objects.all()
@@ -115,32 +197,31 @@ def musicView(request):
         for song in global_top_songs:
             song.like_percentage = (song.like_count / max_likes * 100) if max_likes > 0 else 0
     
-    # ============ FIX: GET USER'S WISHLIST IDS (CONSISTENT NAMING) ============
-    user_favourites = []  # For HOT TRACKS table compatibility
-    user_wishlist_ids = []  # For Global Top 10 table
+    # Get user's wishlist IDs only if authenticated
+    user_favourites = []
+    user_wishlist_ids = []
     
     if request.user.is_authenticated:
-        # Get the list of song IDs the user has liked
         wishlist_ids = list(
             UserFavourite.objects.filter(user=request.user).values_list('song_id', flat=True)
         )
-        user_favourites = wishlist_ids  # Same data, different variable name
-        user_wishlist_ids = wishlist_ids  # Same data, different variable name
-    # ============ END FIX ============
+        user_favourites = wishlist_ids
+        user_wishlist_ids = wishlist_ids
     
     context = {
         "slides": slides,
         "music": music,
         "favourites": favourites,
         "global_top_songs": global_top_songs,
-        "user_wishlist_ids": user_wishlist_ids,  # For Global Top 10 section
-        "user_favourites": user_favourites,  # For HOT TRACKS section
+        "user_wishlist_ids": user_wishlist_ids,
+        "user_favourites": user_favourites,
+        "is_authenticated": request.user.is_authenticated,  # For template checks
     }
     
     return render(request, 'starApp/webpage/audio.html', context)
 
 
-# ============ UPDATED toggle_favourite FUNCTION ============
+# ============ UPDATED toggle_favourite - LOGIN REQUIRED ============
 @login_required
 @require_POST
 def toggle_favourite(request):
@@ -170,7 +251,7 @@ def toggle_favourite(request):
             'status': 'success',
             'liked': liked,
             'action': action,
-            'like_count': like_count  # Return current like count
+            'like_count': like_count
         })
     
     except CollectionModel.DoesNotExist:
@@ -184,38 +265,50 @@ def toggle_favourite(request):
             'message': str(e)
         }, status=500)
 
-def CategoryView(request,name):
-    MusicModel_obj=get_object_or_404(MusicModel,musicName=name)
-    categories=AudioTitleModel.objects.filter(musickey=MusicModel_obj)
+# ============ UPDATED CategoryView - NO AUTH REQUIRED ============
+def CategoryView(request, name):
+    MusicModel_obj = get_object_or_404(MusicModel, musicName=name)
+    categories = AudioTitleModel.objects.filter(musickey=MusicModel_obj)
     
-    categories_with_audios={}
+    categories_with_audios = {}
     for category in categories:
-        audios=CategoryModel.objects.filter(musicModel=category)
-        categories_with_audios[category]=audios
+        audios = CategoryModel.objects.filter(musicModel=category)
+        categories_with_audios[category] = audios
         
-    context={
-            'categories_with_audios':categories_with_audios,
-            'musicName':name,
-            'musicImage':MusicModel_obj.musicImage,
-        }
-    return render(request,'starApp/webpage/music_category.html',context)
+    context = {
+        'categories_with_audios': categories_with_audios,
+        'musicName': name,
+        'musicImage': MusicModel_obj.musicImage,
+        'is_authenticated': request.user.is_authenticated,
+    }
+    return render(request, 'starApp/webpage/music_category.html', context)
 
     
+# ============ UPDATED CollectionView - NO AUTH REQUIRED ============
 def CollectionView(request, ctname, aname, clname):
     music_obj = get_object_or_404(MusicModel, musicName=ctname)
-    audio_obj=get_object_or_404(AudioTitleModel,categorytitle=aname ,musickey=music_obj)
+    audio_obj = get_object_or_404(AudioTitleModel, categorytitle=aname, musickey=music_obj)
     category_obj = get_object_or_404(CategoryModel, artistName=clname, musicModel=audio_obj)
     collections = CollectionModel.objects.filter(categoryModel=category_obj)
+    
+    # Get user favourites only if authenticated
+    user_favourites = []
+    if request.user.is_authenticated:
+        user_favourites = list(UserFavourite.objects.filter(user=request.user).values_list('song_id', flat=True))
+    
     context = {
         "collections": collections,
         "musicName": ctname,
-        "categorytitle":aname,
+        "categorytitle": aname,
         "artistName": clname,
         "artistImage": category_obj.artistImage,
         "artistDescription": category_obj.artistDescription,
+        "user_favourites": user_favourites,
+        "is_authenticated": request.user.is_authenticated,
     }
     return render(request, 'starApp/webpage/collectionlist.html', context)
 
+# ============ UPDATED MusicPlayerView - NO AUTH REQUIRED ============
 def MusicPlayerView(request, catname, aname, cltname, pname):
     music_obj = get_object_or_404(MusicModel, musicName=catname)
     audio_obj = get_object_or_404(AudioTitleModel, categorytitle=aname, musickey=music_obj)
@@ -224,11 +317,13 @@ def MusicPlayerView(request, catname, aname, cltname, pname):
     
     musicPlayer = CollectionModel.objects.filter(categoryModel=category_obj)
     
-    # Check if current song is liked by this user
-    is_liked = UserFavourite.objects.filter(user=request.user, song=collection_obj).exists()
+    # Check if current song is liked by this user (only if authenticated)
+    is_liked = False
+    user_favourites = []
     
-    # Get all user's favourite song IDs
-    user_favourites = list(UserFavourite.objects.filter(user=request.user).values_list('song_id', flat=True))
+    if request.user.is_authenticated:
+        is_liked = UserFavourite.objects.filter(user=request.user, song=collection_obj).exists()
+        user_favourites = list(UserFavourite.objects.filter(user=request.user).values_list('song_id', flat=True))
     
     context = {
         "musicPlayer": musicPlayer,
@@ -244,86 +339,78 @@ def MusicPlayerView(request, catname, aname, cltname, pname):
         "current_song": collection_obj,
         "is_liked": is_liked,
         "user_favourites": user_favourites,
+        "is_authenticated": request.user.is_authenticated,  # For template checks
     }
     return render(request, 'starApp/webpage/musicplayer.html', context)
 
 
  
 def videoView(request):
-    swap=Thumbnail.objects.all()
-    videos=VideosModel.objects.all()
-    likes=CategoryListModel.objects.filter(like=1)
-    context={
-        "swap":swap,
-        "videos":videos,
-        'likes':likes
+    swap = Thumbnail.objects.all()
+    videos = VideosModel.objects.all()
+    likes = CategoryListModel.objects.filter(like=1)
+    context = {
+        "swap": swap,
+        "videos": videos,
+        'likes': likes
     }
-    return render(request,'starApp/webpage/video.html',context)
+    return render(request, 'starApp/webpage/video.html', context)
 
-def moviesView(request,vname):
-    video_obj=get_object_or_404(VideosModel, videoName=vname)
-    categorys=VideoTitleModel.objects.filter(videomodel=video_obj)
-    categorys_with_videos={}
+def moviesView(request, vname):
+    video_obj = get_object_or_404(VideosModel, videoName=vname)
+    categorys = VideoTitleModel.objects.filter(videomodel=video_obj)
+    categorys_with_videos = {}
     for category in categorys:
-        videos=CategoryListModel.objects.filter(videotitle=category)
-        categorys_with_videos[category]=videos
-    context={
-        'categorys_with_videos':categorys_with_videos,
-        'videoName':vname,
-        'bgvideo':video_obj.bgvideo,
-        'videoImage':video_obj.videoImage,
-        
+        videos = CategoryListModel.objects.filter(videotitle=category)
+        categorys_with_videos[category] = videos
+    context = {
+        'categorys_with_videos': categorys_with_videos,
+        'videoName': vname,
+        'bgvideo': video_obj.bgvideo,
+        'videoImage': video_obj.videoImage,
     }
     
-    return render(request,'starApp/webpage/movies.html',context)
+    return render(request, 'starApp/webpage/movies.html', context)
 
-def streamView(request,pname,sname,dname):
-    video_obj=get_object_or_404(VideosModel,videoName=pname)
-    category_obj=get_object_or_404(VideoTitleModel,categorytitle=sname, videomodel=video_obj)
-    stream_obj=get_object_or_404(CategoryListModel, subtitle=dname, videotitle=category_obj )
+def streamView(request, pname, sname, dname):
+    video_obj = get_object_or_404(VideosModel, videoName=pname)
+    category_obj = get_object_or_404(VideoTitleModel, categorytitle=sname, videomodel=video_obj)
+    stream_obj = get_object_or_404(CategoryListModel, subtitle=dname, videotitle=category_obj)
     
-    streaming=CategoryListModel.objects.filter(videotitle=category_obj)
-    context={
-        
-        'streaming':streaming,
-        'videoName':pname,
-        'categorytitle':sname,
-        'subtitle':dname,
-        'videodescription':stream_obj.videodescription,
-        'video':stream_obj.video,
-        'like':stream_obj.like,
-        
+    streaming = CategoryListModel.objects.filter(videotitle=category_obj)
+    context = {
+        'streaming': streaming,
+        'videoName': pname,
+        'categorytitle': sname,
+        'subtitle': dname,
+        'videodescription': stream_obj.videodescription,
+        'video': stream_obj.video,
+        'like': stream_obj.like,
     }
-    return render(request,'starApp/webpage/stream.html',context)
+    return render(request, 'starApp/webpage/stream.html', context)
 
 def SpeedTestView(request):
-    return render(request,'starApp/webpage/speedtest.html')
-
-def contactView(request):
-    return render(request,'starApp/webpage/contact.html')
+    return render(request, 'starApp/webpage/speedtest.html')
 
 def AboutView(request):
     return render(request, 'starApp/webpage/about.html')
 
 def PrivacyViews(request):
-    return render(request,'starApp/webpage/privacy.html')
+    return render(request, 'starApp/webpage/privacy.html')
 
 def SearchViews(request):
-    query=request.GET.get('q')
+    query = request.GET.get('q')
     searched = False
-    songs=[]
-    videos=[]
+    songs = []
+    videos = []
     if query:
-        searched=True
-        
-        songs=CollectionModel.objects.filter(songname__icontains=query)
-       
-        videos=CategoryListModel.objects.filter(subtitle__icontains=query)
-       
+        searched = True
+        songs = CollectionModel.objects.filter(songname__icontains=query)
+        videos = CategoryListModel.objects.filter(subtitle__icontains=query)
     
-    return render(request,'starApp/webpage/search.html', {'songs':songs,'videos':videos, 'searched' :searched})
+    return render(request, 'starApp/webpage/search.html', {'songs': songs, 'videos': videos, 'searched': searched})
 
-def supportview (request):
+def supportview(request):
     return render(request, 'starApp/webpage/support.html')
 
 def profileView(request):

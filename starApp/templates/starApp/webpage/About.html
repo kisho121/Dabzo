@@ -10,32 +10,35 @@ About
 
     {% block content %}
     
-    <div class="container-fluid d-flex justify-content-between mb-0 pb-0">
+    
+    <div class="container-fluid m-0 p-0">
        
-        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
-        <div class="">
-            <h2 class="text-light fw-bolder text-center" style="text-shadow: 1px 1px 1px white;">
-                ABOUT US  
-            </h2>
-        <!-- <p class=" text-info text-center my-0 py-0 ">( {{ total_count }} song{{ total_count|pluralize }} )</p> -->
+            <div class="container-fluid d-flex pt-1 justify-content-between">
+                <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
+
+                <h2 class="text-light fw-bolder text-center playerLogoText" style="text-shadow: 1px 1px 1px white;">
+                    ABOUT US  
+                </h2>
+                <div class="float-end" >
+                    <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
+                    <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
+                </div>
             
-        </div>
-        <div class="float-end" >
-            <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
-            <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
-        </div>
+             </div>
+        
 
     </div>
-    <div class="container text-white">
-        <p style="font-family: serif; text-indent: 7px;">SpotStar is an independent music and online video streaming platform owned by Kishore Subramani. Spotstar currently offers over 100,00 hours of TV content and music across 5 languages. Highly evolved video streaming technology and a high attention to quality of experience across devices and platforms.</p>
-        <h4 class="fw-bolder text-primary py-2 my-2">Features of DABZO</h4>
+    <div class="container text-white ">
+        <p style="font-family: serif; text-indent: 7px;">Dabzo is an independent music and online video streaming platform owned by Kishore Subramani. Dabzo currently offers TV content and music across 5 languages. Highly evolved video streaming technology and a high attention to quality of experience across devices and platforms.</p>
+        <h4 class="fw-bolder text-secondary py-2 my-2">Features of DABZO</h4>
         <ul style="font-family: serif; text-indent: 7px;">
             <li>DABZO provide both Music as well as Video Contents.</li><br>
             <li>Content search on DABZO has been optimized to reduce complexity and delay in accessing content. Accurate search results, with lightning fast autocomplete suggestions navigate users to video with minimal navigation friction and ease of use.</li><br>
             <li> Our adaptive video streaming technology ensures that the best possible video quality is played back automatically based on the available bandwidth, therefore making it a great video experience on both mobile networks as well as WiFi internet connections. Our video is optimized to play on mobile networks with inconsistent throughput so that our users don't have to compromise on their experience on the low end, and play HD quality video on the top end of bandwidth availability.</li><br>
-            <li>DABZO can be Accessed At <a href="{% url 'home' %}">www.dabzo.com</a> .</li>
+            <li>DABZO can be Accessed At <a href="{% url 'home' %}">www.dabzo.onrender.com</a> .</li>
         </ul>
     </div>
+   
     {% include 'starApp/inc/footer.html' %}
     
     {% endblock content %}

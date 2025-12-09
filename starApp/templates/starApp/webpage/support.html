@@ -7,27 +7,24 @@ Support
 
 {% block content %}
 
-<div class="container-fluid d-flex justify-content-between mt-2">
-    <img class="float-start playerLogo" src="{% static 'images/favicon.png' %}" alt="logo" width="100px">
+<div class="container-fluid d-flex justify-content-between mb-2 pt-1 pb-0">
+       
+        <img class="float-start playerLogo"  src="{% static 'images/favicon.png' %}" alt="logo" width="100px" >
+        <div class="">
+            <h3 class="text-light fw-bolder text-center playerLogoText" style="text-shadow: 1px 1px 1px white;">
+                SUPPORT
+            </h3>
+            
 
-    <div class="text-center">
-        <h2 class="text-light fw-bolder" style="text-shadow: 1px 1px 2px white;">
-            SUPPORT
-        </h2>
-        <p class="text-info my-0" style="font-family: serif;">Here to help you with DABZO</p>
-    </div>
+            
+        </div>
+        <div class="float-end" >
+            <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
+            <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
+        </div>
 
-    <div>
-        <button class="btn btn-sm btn-outline-info m-1" onclick="history.back()">
-            <i class="bi bi-arrow-left fs-6"></i>
-        </button>
-        <a href="{% url 'home' %}">
-            <button class="btn btn-sm btn-outline-info m-1">
-                <i class="bi bi-house fs-6"></i>
-            </button>
-        </a>
     </div>
-</div>
+    <p class="text-info my-0 small text-center" style="font-family: serif;">Here to help you with DABZO</p>
 
 
 <div class="container text-white mt-4">
