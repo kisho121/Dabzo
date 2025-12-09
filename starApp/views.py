@@ -218,7 +218,7 @@ def musicView(request):
         "is_authenticated": request.user.is_authenticated,  # For template checks
     }
     
-    return render(request, 'starApp/webpage/audio.html', context)
+    return render(request, 'starApp/webpage/Audio.html', context)
 
 
 # ============ UPDATED toggle_favourite - LOGIN REQUIRED ============
@@ -393,7 +393,7 @@ def SpeedTestView(request):
     return render(request, 'starApp/webpage/speedtest.html')
 
 def AboutView(request):
-    return render(request, 'starApp/webpage/about.html')
+    return render(request, 'starApp/webpage/About.html')
 
 def PrivacyViews(request):
     return render(request, 'starApp/webpage/privacy.html')
