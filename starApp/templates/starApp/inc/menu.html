@@ -1,8 +1,124 @@
 {% load static %}
-<div class="menubar col-2 col-sm-2 col-md-2 col-lg-1" style="background-color: rgb(0, 0, 0);" >
-    <img class="logo-nav col-2 col-sm-2 col-md-2 col-lg-1 mt-1" src="{% static 'images/favicon.png' %}" alt="logo" >
+<style>
+    .menubar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        overflow-x: hidden;
+        transition: width 0.3s ease, transform 0.3s ease;
+        z-index: 1000;
+        width: 0;
+        transform: translateX(-100%);
+        scrollbar-width: none;
+    }
     
-            <ul class="nav flex-column navigation">
+    .menubar.expanded {
+        width: 11vw !important;
+        transform: translateX(0);
+    }
+    
+    .menu-toggle-btn {
+        position: fixed;
+        left: 10px;
+        top: 10px;
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #00B7B5, #009d9b);
+        border: none;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1001;
+        box-shadow: 0 4px 15px rgba(0, 183, 181, 0.4);
+    }
+    
+    .menu-toggle-btn:hover {
+        background: linear-gradient(135deg, #009d9b, #00B7B5);
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(0, 183, 181, 0.6);
+    }
+    
+    .menu-toggle-btn i {
+        color: white;
+        font-size: 22px;
+        transition: transform 0.3s ease;
+    }
+    
+
+    .menu-toggle-btn.expanded {
+    left: 9.3vw;
+}
+
+.menu-toggle-btn.expanded i {
+    transform: rotate(180deg);
+}
+
+    
+    /* Overlay when menu is open */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .menubar-content {
+        padding: 20px 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease 0.1s;
+    }
+    
+    .menubar.expanded .menubar-content {
+        opacity: 1;
+    }
+    
+     .logo-nav {
+        width: 5rem;
+        height: 3.5rem;
+        margin-bottom: 20px;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .menubar.expanded {
+            width: 180px !important;
+        }
+        
+        .menubar.expanded ~ .menu-toggle-btn {
+            left: 195px;
+        }
+    }
+</style>
+
+<!-- Menu Toggle Button (Always Visible) -->
+<button class="menu-toggle-btn" id="menuToggleBtn">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- Overlay -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- Sidebar Menu -->
+<div class="menubar" id="sidebar" style="background-color: rgb(0, 0, 0, 0.5);">
+    <div class="menubar-content">
+        <img class="logo-nav mx-auto d-block" src="{% static 'images/favicon.png' %}" alt="logo">
+        
+        <ul class="nav flex-column navigation">
 
                 {% if request.user.is_authenticated %}
                 <li class="nav-item">
@@ -92,4 +208,56 @@
 
 
             </ul>
- </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const menuToggleBtn = document.getElementById('menuToggleBtn');
+    const menuOverlay = document.getElementById('menuOverlay');
+
+    // Toggle menu function
+    function toggleMenu() {
+        sidebar.classList.toggle('expanded');
+        menuOverlay.classList.toggle('active');
+
+        // Move button
+        menuToggleBtn.classList.toggle('expanded');
+
+        // Change icon
+        const icon = menuToggleBtn.querySelector('i');
+        if (sidebar.classList.contains('expanded')) {
+            icon.classList.remove('bi-list');
+            icon.classList.add('bi-x');
+        } else {
+            icon.classList.remove('bi-x');
+            icon.classList.add('bi-list');
+        }
+    }
+
+    // Toggle on button click
+    menuToggleBtn.addEventListener('click', toggleMenu);
+
+    // Close on overlay click
+    menuOverlay.addEventListener('click', toggleMenu);
+
+    // Close menu when clicking on a link (optional)
+    const navLinks = sidebar.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                toggleMenu();
+            }
+        });
+    });
+
+    // Close menu on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar.classList.contains('expanded')) {
+            toggleMenu();
+        }
+    });
+});
+
+</script>

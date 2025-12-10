@@ -13,7 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from logging import config
 from pathlib import Path
 from decouple import config, Csv
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
 
@@ -34,6 +36,10 @@ if DEBUG:
     ALLOWED_HOSTS = config('ALLOWED_HOSTS_LOCAL', cast=Csv())
 else:
     ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
+    # Also allow localhost for testing in production (optional)
+    ALLOWED_HOSTS.append('127.0.0.1')
+    ALLOWED_HOSTS.append('localhost')
+
 
 # Application definition
 
@@ -101,14 +107,27 @@ STATICFILES_IGNORE_PATTERNS = [
     'admin/js/cancel.js',
     'admin/js/popup_response.js',
 ]
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
 
-if not DEBUG:  # Production only
-    CLOUDINARY_STORAGE = {
-        'CLOUD_NAME': config('CLOUD_NAME'),
-        'API_KEY': config('CLOUD_API_KEY'),
-        'API_SECRET': config('CLOUD_API_SECRET'),
-    }
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+cloudinary.config(
+    cloud_name=config('CLOUDINARY_CLOUD_NAME'),
+    api_key=config('CLOUDINARY_API_KEY'),
+    api_secret=config('CLOUDINARY_API_SECRET')
+)
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 
 
 # Note: You may also want to fix the 'djdt' warning (URL namespace) while you are here,
@@ -124,7 +143,7 @@ if not DEBUG:  # Production only
     #    'HOST':'localhost',
      #   'USER':'root',
       #  'PASSWORD':'1234',
-       # 'PORT':'3306',
+       # 'PORT':'3306', 
     #}
 #}
 DATABASES = {
@@ -174,9 +193,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Default primary key field type

@@ -310,12 +310,12 @@ i{
   .navigation li.nav-item{
     margin: auto;
   }
-  img.logo-nav{
+  /* img.logo-nav{
     top: 0%;
     margin: auto;
     background-position: center;
     width: 96%;
-  }
+  } */
   i{
     color: white; 
     opacity: 0.8;
@@ -463,9 +463,9 @@ i:hover{
   display: grid;
   overflow-x: hidden;
 }
-.sidebar{  
+/* .sidebar{  
   height: auto;
-}
+} */
 .main-content{
   height: auto; 
   max-width: 100%;

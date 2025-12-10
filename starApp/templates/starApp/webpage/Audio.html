@@ -9,11 +9,11 @@ Music
 {% block content %}
 
 <div class="contain-body container-fluid row w-100 m-0 p-0 ">
-    <div class="col-2 col-sm-2 col-md-2 col-lg-1">
+    <div class="">
         {% include 'starApp/inc/menu.html' %}
     </div>
      
-    <div class="main-content mx-auto col-10 col-sm-10 col-md-10 col-lg-11 px-0 mx-0">
+    <div class="main-content mx-auto px-0 mx-0">
     
       <div id="demo" class="carousel slide"  >
           <div class="carousel-indicators">
@@ -57,7 +57,7 @@ Music
             </div>
         </div>
        <!-- ============ NEW GLOBAL TOP 10 MOST LIKED SONGS SECTION ============ -->
-<div class="global-top-section mx-1">
+<div class="global-top-section container-fluid">
     <div class="section-header"><i class="bi bi-trophy text-warning fs-3"></i>
         <h2 class="section-title">
             
@@ -68,7 +68,7 @@ Music
     </div>
 
     {% if global_top_songs %}
-    <div class="table-responsive mx-1">
+    <div class="table-responsive">
         <table class="container-fluid global-top-table">
             <thead>
                 <tr>
