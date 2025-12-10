@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from logging import config
 from pathlib import Path
-from decouple import config
+from decouple import config, Csv
 
 
 
@@ -30,7 +30,10 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS").split(",")
+if DEBUG:
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS_LOCAL', cast=Csv())
+else:
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS_PROD', cast=Csv())
 
 # Application definition
 
@@ -49,6 +52,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google', 
     'allauth.socialaccount.providers.facebook',
+    'cloudinary',
+    'cloudinary_storage',
     # 'debug_toolbar',
 ]
 
@@ -96,6 +101,15 @@ STATICFILES_IGNORE_PATTERNS = [
     'admin/js/cancel.js',
     'admin/js/popup_response.js',
 ]
+
+if not DEBUG:  # Production only
+    CLOUDINARY_STORAGE = {
+        'CLOUD_NAME': config('CLOUD_NAME'),
+        'API_KEY': config('CLOUD_API_KEY'),
+        'API_SECRET': config('CLOUD_API_SECRET'),
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # Note: You may also want to fix the 'djdt' warning (URL namespace) while you are here,
 # by ensuring your settings are correct for the Django Debug Toolbar.
@@ -226,7 +240,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL ='login'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kishoor121@gmail.com'
-EMAIL_HOST_PASSWORD = 'gfxh ocmj exzx irjw'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
