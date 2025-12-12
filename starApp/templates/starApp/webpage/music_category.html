@@ -1,5 +1,6 @@
-    {% extends 'starApp/layouts/main.html' %}
+{% extends 'starApp/layouts/main.html' %}
 {% load static %}
+{% load cloudinary_filters %}
 
 {% block title %}
 Music | Category
@@ -44,10 +45,13 @@ Music | Category
        <div class="col-6 col-sm-4 col-md-3 col-lg-2 my-3 image-grid-item1">
         <div class="card py-3 rounded-2 displayCard">
            <a href="{% url 'collection' musicName category.categorytitle audio.artistName  %}" style="text-decoration: none; text-align:center;">
-              <img class="card-img-top rounded-corners mx-auto art-img" src="{{ audio.artistImage.url }}" alt="" width="80%" height="80%">
-                <!-- <div class="card-img-overlay">
-                    <img class="pop-btn1" src="{% static 'images/play.png' %}" alt="" />
-                </div> -->
+              <!-- Use cl_card filter for grid images -->
+              <img class="card-img-top rounded-corners mx-auto art-img" 
+                   src="{{ audio.artistImage.url|cl_card }}" 
+                   alt="{{ audio.artistName }}" 
+                   loading="lazy"
+                   width="80%" 
+                   height="80%">
               <p class="fw-bold mt-2 sizeText">{{ audio.artistName }}</p>
             </a>
         </div>
@@ -61,12 +65,15 @@ Music | Category
     <div class="row mb-2">
     {% for audio in audios %}
        <div class="col-6 col-sm-6 col-md-4 col-lg-3 image-grid-item2 mb-2">
-        <div class="card displayCard rounded-2">
+        <div class="card displayCard rounded-2 m-2">
            <a href="{% url 'collection' musicName category.categorytitle audio.artistName  %}" style="text-decoration: none; text-align:center;">
-              <img class="card-img-top  art-album" src="{{ audio.artistImage.url }}" alt="" width="40%" height="40%">
-                <!-- <div class="card-img-overlay">
-                    <img class="pop-btn2" src="{% static 'images/play.png' %}" alt="" />
-                </div> -->
+              <!-- Use cl_album filter for larger images -->
+              <img class="card-img-top art-album" 
+                   src="{{ audio.artistImage.url|cl_album }}" 
+                   alt="{{ audio.artistName }}"
+                   loading="lazy"
+                   width="40%" 
+                   height="40%">
               <p class="text-white fw-bold mt-2 sizeText fs-3" style="font-family: serif; letter-spacing:1px">{{ audio.artistName }}</p>
             </a>
         </div>
@@ -83,19 +90,3 @@ Music | Category
 </div>
 
 {% endblock content %}
-
-<!--{% block scripts %}
-
-<script>
-    document.getElementById('showMoreBtn').addEventListener('click',function(){
-        let hiddenList=document.querySelectorAll('.hidden-images');
-        hiddenList.forEach(function(item){
-            item.classList.remove('hidden-images');
-        });
-        this.style.display='none';
-
-    })
-</script>
-
-{%  endblock scripts %}
-

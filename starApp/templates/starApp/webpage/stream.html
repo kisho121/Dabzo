@@ -1,6 +1,7 @@
 
 {% extends 'starApp/layouts/main.html' %}
 {% load static %}
+{% load cloudinary_filters %}
 
 {% load custom_filters %}
 {% block title %}
@@ -9,8 +10,22 @@ Video | streaming
     {% block content %}
         <div class="contain-body">
             <div class="row sidebar">
-                <div class="">
+                <div class="container-fluid d-flex justify-content-between mb-0 pb-0">
+                    <div class=" ">
                     {% include 'starApp/inc/menu.html' %}             
+                </div>
+                    <div class="">
+                        
+                    <h2 class="h2 text-white text-center" style="font-weight: 900;">{{ subtitle }}</h2>
+
+                    <!-- <p class=" text-info text-center my-0 py-0 ">( {{ total_count }} song{{ total_count|pluralize }} )</p> -->
+                        
+                    </div>
+                    <div class="float-end" >
+                        <button type="button" class="btn btn-sm btn-outline-info m-1" onclick="history.back()" data-bs-toggle="tooltip" title="Back"><i class="bi bi-arrow-left fs-6 "></i></button>
+                        <a href="{% url 'home' %}"><button class="btn btn-sm btn-outline-info m-1" type="button" data-bs-toggle="tooltip" title="Home"><i class="bi bi-house fs-6 "></i></button></a>      
+                    </div>
+
                 </div>
                 <div class="main-content">
 
@@ -36,10 +51,7 @@ Video | streaming
                             {% else %}
                                 <p class="text-white">No video available.</p>
                             {% endif %}
-                        </div>
-
-                        <h2 class="h2 text-white text-center" style="font-weight: 900;">{{ subtitle }}</h2>
-                    
+                        </div>                    
                         <p class="text-white">{{ videodescription }}</p>
                         <!-- {% if like %}
                         <i class="bi bi-heart-fill text-danger "></i>
@@ -57,9 +69,9 @@ Video | streaming
                             <h2 class="text-center text-muted fw-bold" style="text-shadow: 1px 1px 1px rgb(157, 154, 154); text-transform: uppercase;">{{categorytitle}}</h2>
                             {% for stream in streaming %}
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 px-lg-1">
-                                <div class="text-start play-card h-75 ">
+                                <div class="text-start play-card h-75 m-2">
                                     <a class="link" href="{% url 'stream' videoName categorytitle stream.subtitle %}">
-                                        <img class="card-img-top playcardimg" style="object-fit: cover; height: 88%;" src="{{ stream.videothumbnail.url }}"  alt="Title" />
+                                        <img class="card-img-top playcardimg rounded-2" style="object-fit: cover;" src="{{ stream.videothumbnail.url|cl_video_thumb }}"  alt="Title" />
                                         <div class="m-0 p-0">
                                             <h5 class="card-title cardfooter text-light ">{{ stream.subtitle }}</h5>
                                         </div>

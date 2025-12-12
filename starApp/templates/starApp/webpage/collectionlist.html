@@ -1,5 +1,8 @@
 {% extends 'starApp/layouts/main.html' %}
+
 {% load static %}
+{% load cloudinary_filters %}
+
 
 {% block title %}
 Music | List 
@@ -21,7 +24,7 @@ Music | List
 <div class="container-fluid mb-2 artistBG">
   <div class="row w-100">
     <div class="col-12 col-sm-6 col-md-3 col-lg-2 mx-auto ">
-        <img src="{{ artistImage.url }}" alt="" class="img-thumbnail imgThumb" >
+        <img src="{{ artistImage.url|cl_opt }}" alt="image" class="img-thumbnail imgThumb" >
     </div>
       <div class="col-12 col-sm-12 col-md-8 col-lg-10">
         <div class="d-flex w-100 mt-1">
@@ -54,7 +57,7 @@ Music | List
 
       <td class="py-2 text-center">
         <div class="audio-img-container">
-          <img src="{{list.cltnImage.url}}" alt="" class="img-icon">
+          <img src="{{list.cltnImage.url|cl_opt:'thumb'}}" alt="image" class="img-icon">
         </div>
       </td>
 

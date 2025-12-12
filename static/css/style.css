@@ -210,7 +210,6 @@ td{
   display: block;
   max-width: 75%;
   height: auto;
-  border: 1px solid white;
 }
 .art-img:hover{
   filter: brightness(120%);
@@ -290,12 +289,12 @@ i{
 } */
 
 
-  div.menubar{
+  /* div.menubar{
     left: 0%;
     top: 0%;
     height: 100%;
     position: fixed;
-  }
+  } */
 
   .navigation{
     font-size: 1.5rem;
@@ -801,419 +800,788 @@ a.link{
 }
 
 
-         /** max-width: 1200px **/
+/* Reduce animation complexity for better performance */
+.global-top-section {
+    padding-top: 10px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    border-radius: 5px;
+    margin: 20px auto;
+    max-width: 1500px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Remove expensive rotating background animation - use static gradient */
+.section-header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Simplified title animation */
+.section-title {
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+.badge.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    font-weight: bold;
+    padding: 8px 15px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Table Styles */
+.global-top-table {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.global-top-table thead {
+    background: linear-gradient(135deg, #d30c9b, #a10757, #f35db9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.global-top-table thead th {
+    padding: 20px 3px;
+    font-weight: 900;
+    font-size: 1.5vw;
+    font-family: serif;
+}
+
+.song-row {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    will-change: transform;
+}
+
+.song-row:hover {
+    background: rgba(23, 162, 184, 0.25);
+    transform: translateX(5px) scale(1.01);
+    box-shadow: 0 8px 25px rgba(23, 162, 184, 0.3);
+    cursor: pointer;
+}
+
+.champion-row {
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), transparent);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.podium-row {
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), transparent);
+}
+
+/* Rank Badges - Simplified animations */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: 900;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.rank-badge.champion {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #000;
+    animation: pulse-champion 2s infinite;
+}
+
+.crown-icon {
+    position: absolute;
+    top: -20px;
+    font-size: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Optimized animations - reduce frequency */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes pulse-champion {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.rank-badge.runner-up {
+    background: linear-gradient(135deg, #cd7f32, #e8a87c);
+    color: #000;
+    box-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
+}
+
+.rank-badge.third-place {
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+    color: #000;
+    box-shadow: 0 0 15px rgba(205, 127, 50, 0.5);
+}
+
+.number-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Song Image */
+.song-image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.img-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.fire-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: linear-gradient(135deg, #ff4757, #ff6348);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 71, 87, 0.6);
+}
+
+/* Song Details */
+.song-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.song-title {
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Like Stats */
+.like-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.like-count-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.popularity-bar {
+    width: 60px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.popularity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #ffd700);
+    border-radius: 3px;
+    transition: width 1s ease;
+}
+
+/* Like/Favourite Buttons */
+.like-btn, .table-like-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 5px;
+}
+
+.like-btn:hover, .table-like-btn:hover {
+    transform: scale(1.2);
+    color: #ff4757;
+}
+
+.like-btn.liked, .table-like-btn.liked {
+    color: #ff4757;
+}
+
+.table-like-btn svg {
+    pointer-events: none;
+}
+
+/* Empty State */
+.empty-state {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 40px 20px;
+}
 
 @media screen and (max-width:1200px){
-  .imgThumb{
-    width: 15vw;
-  }
-  .displayCard .sizeText{
-    font-size: 1.2vw;
-  }
+
+  .imgThumb{ width: 15vw; }
+
+  .displayCard .sizeText{ font-size: 1.2vw; }
+
   .textLang{
     font-size: 2.5vw;
     font-weight: 700;
   }
+
   .custom-icon{
     width: 175px;
     height: 175px;
   }
-  .video-icon{
-    width:320px;
-  }
-  .nav-link{
-    font-size: 1.3rem;
-  }
-  th{
-    font-size: 1.5vvw;
-  }
-  td{
-    font-size: 1.3vw;
-  }
-  .movieArt{
-  font-size: 1.4vw;
-}
-.biMenu{
-  font-size: 3.4vw;
-}
-.Detailed{
-  font-size: 1.7vw;
-}
-.card-title{
 
-  font-weight: 700;
-  font-size: 1.5vw;
-}
-h1.title-content{
-  font-size: 2.6vw;
-}
-h1.title-content{
-  font-size: 2.6vw;
-}
-p.listItem{
-  font-size: 2.2vw;
-}
-.text-info{
-  font-size: 1.8vw;
-}
-.global-top-table thead th{
-  font-size: 1.8vw !important;
-}
-.popularity-bar {
-    width: 50px !important;
-}
-.homeLogo{
-  top: 5px; 
-  left: 5px; 
-  width: 12vw;
-  height: auto;
-}
-h1.home-display{
-  width: 100%;
- font-size: 2.5rem ;
-}
-.sectionBoxText{
-  font-size: 1.7vw;
-}
-/* .card-body,h5 .cardfooter{
-  font-size: 1.4vw !important;
-}  */
-.song-title {
-    color: #fff;
+  .video-icon{ width: 320px; }
+
+  .nav-link{ font-size: 1.3rem; }
+
+  th{ font-size: 1.5vw; }
+  td{ font-size: 1.3vw; }
+
+  .movieArt{ font-size: 1.4vw; }
+  .biMenu{ font-size: 3.4vw; }
+  .Detailed{ font-size: 1.7vw; }
+
+  .card-title{
     font-weight: 700;
+    font-size: 1.5vw;
+  }
+
+  h1.title-content{
+    font-size: 2.6vw;
+  }
+
+  p.listItem{ font-size: 2.2vw; }
+
+  .text-info{ font-size: 1.8vw; }
+
+  .global-top-table thead th{
+    font-size: 1.8vw !important;
+  }
+
+  .popularity-bar{ width: 50px !important; }
+
+  .homeLogo{
+    top: 5px;
+    left: 5px;
+    width: 12vw;
+  }
+
+  h1.home-display{ font-size: 2.5rem; }
+
+  .sectionBoxText{ font-size: 1.7vw; }
+
+  .song-title{
     font-size: 1.4vw;
-    font-family: sans-serif;
-    
-}
-.stream{
-  width: 100%;
-  max-width: 100% !important;
-  height: auto !important;
- 
-}
-
-}
-
-
-         /** max-width: 900px **/
-
-@media screen and (max-width:900px) {
- .navigation{
-  top: 10%;
- } 
- .imgThumb{
-  width: 25vw;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-}
-.custom-icon{
-    width:150px;
-    height:150px;
-  }
-  .video-icon{
-    width: 260px;
-  }
-.textLang{
-    font-size: 3.5vw;
-    font-weight: 600;
-  }
-.displayCard .sizeText{
-   font-size: 1.7vw;
-}
-.card-title{
-
-  font-weight: 600;
-  font-size: 1.8vw;
-}
-.biMenu{
-  font-size: 4.6vw;
-}
-
-.nav-link{
-  font-size: 1.3rem;
-}
-th{
-  font-size: 2.0vw;
-}
-td{
-  font-size: 2.2vw;
-}
-.movieArt{
-  font-size: 2.0vw;
-}
-.Detailed{
-  font-size: 2.2vw;
-}
-h1.title-content{
-  font-size: 3.2vw;
-}
-h1.title-content-2{
-  font-size: 3.2vw;
-}
-p.listItem{
-  font-size: 2.2vw;
-}
-.text-info{
-  font-size: 2.4vw;
-}
-.global-top-table thead th{
-  font-size: 2.4vw !important;
-}
-.popularity-bar {
-    width: 40px !important;
-}
-.homeLogo{
-  top: 0px; 
-  left: 0px; 
-  width: 12vw;
-  height: auto;
-}
-h1.home-display{
-  width: 100%;
-  font-size: 2.2rem;
-  
-}
-iframe{
-   border-radius: 0%;
-}
-
-.sectionBoxText{
-  font-size: 2.4vw;
-} 
-/* .card-body,h5 .cardfooter{
-  font-size: 1.4vw !important;
-}  */
-.song-title {
-    color: #fff;
     font-weight: 700;
-    font-size: 2.2vw;
-    font-family: sans-serif;
-    
-}
-.stream{
-  width: 100%;
-  max-width: 100% !important;
-  height: auto !important;
- 
-}
-
-}
-
-             
-         /** Max-width : 600px**/
-
-@media screen and (max-width:600px) {
-  img.logo{
-    width: 18%;
   }
-  /* .loginPic{
-    width: 30%;
-    height: 30%;
-  } */
-  .textLang{
-    font-size: 5vw ;
-    font-weight: 600;
-  }
-  .caro-img{
-    height: 70px !important;
+
+  .stream{
     width: 100%;
-    
+    max-width: 100%;
+    height: auto;
   }
-  .biMenu{
-  font-size: 6.0vw;
 }
- 
-  .mAlert{
-    width: 80% !important;
-  }
-  i{
-    font-size: 15px;
-    margin-top: 0vh;
-    left: 0%;
-  }        
-  ul.navigation li.nav-item a.nav-link i{
-    margin: auto;
-  }          
-  
+
+@media screen and (max-width:992px){
+
+  .navigation{ top: 10%; }
+
   .imgThumb{
-    width: 50vw;
+    width: 25vw;
     margin: auto;
     display: flex;
     justify-content: center;
   }
-  .displayCard .sizeText{
-    font-size: 3vw !important;
+
+  .custom-icon{
+    width: 150px;
+    height: 150px;
   }
-  .nav-link{
-    font-size: 3.3vw;
+
+  .video-icon{ width: 260px; }
+
+  .textLang{
+    font-size: 3.5vw;
+    font-weight: 600;
   }
-  th{
-    font-size: 3vw;
+
+  .displayCard .sizeText{ font-size: 1.7vw; }
+
+  .card-title{
+    font-weight: 600;
+    font-size: 1.8vw;
   }
+
+  .biMenu{ font-size: 4.6vw; }
+
+  .nav-link{ font-size: 1.3rem; }
+
+  th{ font-size: 2.0vw; }
+  td{ font-size: 2.2vw; }
+
+  .movieArt{ font-size: 2.0vw; }
+  .Detailed{ font-size: 2.2vw; }
+
+  h1.title-content,
+  h1.title-content-2{
+    font-size: 3.2vw;
+  }
+
+  p.listItem{ font-size: 2.2vw; }
+
+  .text-info{ font-size: 2.4vw; }
+
+  .global-top-table thead th{
+    font-size: 2.4vw !important;
+  }
+
+  .popularity-bar{ width: 40px !important; }
+
+  .homeLogo{
+    top: 0;
+    left: 0;
+    width: 12vw;
+  }
+
+  h1.home-display{ font-size: 2.2rem; }
+
+  iframe{ border-radius: 0%; }
+
+  .sectionBoxText{ font-size: 2.4vw; }
+
+  .song-title{
+    font-size: 2.2vw;
+    font-weight: 700;
+  }
+
+  .stream{
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+  .section-title {
+        font-size: 2rem;
+    }
+    
+    .global-top-table {
+        font-size: 0.9rem;
+    }
+    
+    .img-icon {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media screen and (max-width:768px){
+
+  img.logo{ width: 18%; }
+
+  .textLang{
+    font-size: 5vw;
+    font-weight: 600;
+  }
+
+  .caro-img{
+    height: 70px !important;
+    width: 100%;
+  }
+
+  .biMenu{ font-size: 6vw; }
+
+  .mAlert{ width: 80% !important; }
+
+  i{
+    font-size: 15px;
+    margin-top: 0;
+    left: 0;
+  }
+
+  .imgThumb{
+    width: 50vw;
+    margin: auto;
+  }
+
+  .displayCard .sizeText{ font-size: 3vw !important; }
+
+  .nav-link{ font-size: 3.3vw; }
+
+  th{ font-size: 3vw; }
+
   td{
     font-size: 2.2vw;
     font-weight: 100;
-
   }
+
   .movieArt{
     font-size: 2.7vw;
     font-weight: 100 !important;
   }
-  li.nav-item:hover span{
-  font-size: 3.2vw ;
-}
-.Detailed{
-  font-size: 3vw;
-  font-weight: 100;
-}
-.homeLogo{
-  width: 25vw;
-  height: auto;
-}
-h1.home-display{
-  
-  width: 100%;
-  text-shadow: none;
-  font-size: 2rem;
-  
-}
-h1.title-content{
-  font-size: 4.5vw;
-  margin-bottom: 4%;
-}
-h1.title-content-2{
-  font-size: 4.5vw;
-  margin-bottom: 4%;
-}
-p.listItem{
-  font-size: 3.6vw;
-  padding: 0% !important;
-}
-.text-info{
-  font-size: 3.2vw;
-}
-.global-top-table thead th{
-  font-size: 3.2vw !important;
-  font-weight: 900 !important;
-}
-.popularity-bar {
-    width: 30px !important;
-}
-iframe{
-  height: 200px!important;
-  width: 100% !important;
 
-}
-.stream{
-  width: 100%;
-  max-width: 100% !important;
-  height: auto !important;
- 
-}
-
- play-card{
-   height: 180px !important;
- }
-.playcardimg{
-    max-width: 100vw !important;
-    height:  180px !important;
-}
-.card-thumb{
-  height: 120px !important;
-  width: auto !important;
-}
-
-.sectionBoxText{
-  font-size: 3vw !important;
-} 
- .topTitle{
-  font-size: 4.2vw !important;
- }
- .topIcon{
-  font-size: 25px !important;
- }
- .videoBox h4{
-  opacity: 100% !important;
- }
- .authBox{
-  margin-top: 80px !important;
-  width: 75% !important;
- }
- .welcomeText2{
-  font-size: 3.8vw !important;
-  
- }
- .welcomeText1{
-  font-size: 4.5vw !important;
-  
- }
- /* .custom-icon2{
-  width: 70% !important;
- } */
- .song-list {
-
-    grid-template-columns: repeat(1, 1fr) !important;
-  
-}
-.play-pause-btn {
-    width: 40px !important;
-    height: 40px !important;
-   
+  .Detailed{
+    font-size: 3vw;
+    font-weight: 100;
   }
- .control-btn {
-  width: 30px !important;
-  height: 30px !important;
- }
- #playStatus{
-  font-size: 3vw !important;
- }
- .img-thumbnail{
-  width: 160px !important;
-  height: 160px !important;
-  margin: auto !important;
- }
- /* .bgCard{
-  width: 200px !important;
- } */
- .playerLogo{
-  width: 70Px !important;
- 
- }
+
+  .homeLogo{ width: 25vw; }
+
+  h1.home-display{
+    font-size: 2rem;
+  }
+
+  h1.title-content,
+  h1.title-content-2{
+    font-size: 4.5vw;
+    margin-bottom: 4%;
+  }
+
+  p.listItem{ font-size: 3.6vw; }
+
+  .text-info{ font-size: 3.2vw; }
+
+  .global-top-table thead th{
+    font-size: 3.2vw !important;
+    font-weight: 900 !important;
+  }
+
+  .popularity-bar{ width: 30px !important; }
+
+  iframe{
+    height: 200px !important;
+    width: 100% !important;
+  }
+
+  play-card{
+     height: 180px !important; 
+    }
+
+  /* .playcardimg{
+    width: 100vw !important;
+    height: 180px !important;
+  } */
+
+  .card-thumb{
+    height: 120px !important;
+    width: auto !important;
+  }
+
+  .sectionBoxText{ font-size: 3vw !important; }
+
+  .topTitle{ font-size: 4.2vw !important; }
+  .topIcon{ font-size: 25px !important; }
+
+  .authBox{
+    margin-top: 80px !important;
+    width: 75% !important;
+  }
+
+  .welcomeText2{ font-size: 3.8vw !important; }
+  .welcomeText1{ font-size: 4.5vw !important; }
+
+  .song-list{
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+
+  .play-pause-btn{
+    width: 40px;
+    height: 40px;
+  }
+
+  .control-btn{
+    width: 30px;
+    height: 30px;
+  }
+
+  #playStatus{ font-size: 3vw !important; }
+
+  .img-thumbnail{
+    width: 160px !important;
+    height: 160px !important;
+    margin: auto !important;
+  }
+
+  .playerLogo{ width: 70px !important; }
+
   .playerLogoText{
     margin-top: 8px;
     font-size: 4.5vw !important;
   }
- .number-circle, 
- .rank-badge.third-place,
+
+  .number-circle,
+  .rank-badge.third-place,
   .rank-badge.runner-up,
   .rank-badge.champion{
     width: 20px !important;
     height: 20px !important;
-
   }
-  .song-title {
- 
-    font-weight: 100;
+
+  .song-title{
     font-size: 2.8vw;
+    font-weight: 100;
+  }
+
+  .card-title{
+    font-weight: 600;
+    font-size: 4.5vw;
+  }
+
+  .custom-icon{
+    width: 120px;
+    height: 120px;
+  }
+
+  .video-icon{
+    width: 200px;
+    margin: auto;
+  }
+
+  .coverBOX{
+     margin: auto !important; 
+    }
+     .section-title {
+        font-size: 1.5rem;
+    }
     
-}
-.card-title{
-  font-weight: 600;
-  font-size: 4.5vw;
-}
-.custom-icon{
-  width: 120px;
-  height: 120px;
-}
-.video-icon{
-  width: 200px;
-  margin: auto;
-}
-.coverBOX{
-  margin: auto !important;
+    .song-row:hover {
+        transform: translateX(3px) scale(1.005);
+    }
+    
+    .global-top-table thead th {
+        font-size: 3vw;
+        padding: 15px 2px;
+    }
+    
+    .song-title {
+        font-size: 0.95rem;
+    }
 }
 
+/* Extra Small Devices (max-width: 576px) */
+@media screen and (max-width:576px){
+
+  img.logo{
+    width: 20%;
+  }
+
+  .textLang{
+    font-size: 5.5vw;
+    font-weight: 600;
+  }
+
+  .caro-img{
+    height: 65px !important;
+    width: 100%;
+  }
+
+  .biMenu{
+    font-size: 6.5vw;
+  }
+
+  .mAlert{
+    width: 85% !important;
+  }
+
+  .imgThumb{
+    width: 55vw;
+    margin: auto;
+  }
+
+  .displayCard .sizeText{
+    font-size: 3.2vw !important;
+  }
+
+  .nav-link{
+    font-size: 3.6vw;
+  }
+
+  th{
+    font-size: 3.4vw;
+  }
+
+  td{
+    font-size: 3vw;
+    font-weight: 100;
+  }
+
+  .movieArt{
+    font-size: 3.2vw;
+    font-weight: 100 !important;
+  }
+
+  .Detailed{
+    font-size: 3.3vw;
+    font-weight: 100;
+  }
+
+  .homeLogo{
+    width: 28vw;
+  }
+
+  h1.home-display{
+    font-size: 1.9rem;
+  }
+
+  h1.title-content,
+  h1.title-content-2{
+    font-size: 4.8vw;
+    margin-bottom: 4%;
+  }
+
+  p.listItem{
+    font-size: 3.8vw;
+  }
+
+  .text-info{
+    font-size: 3.4vw;
+  }
+
+  .global-top-table thead th{
+    font-size: 3.5vw !important;
+    font-weight: 900 !important;
+  }
+
+  .popularity-bar{
+    width: 28px !important;
+  }
+
+  iframe{
+    height: 190px !important;
+    width: 100% !important;
+  }
+
+  /* .playcardimg{
+    height: 170px !important;
+    width: 100% !important;
+  } */
+
+  .card-thumb{
+    height: 110px !important;
+  }
+
+  .sectionBoxText{
+    font-size: 3.2vw !important;
+  }
+
+  .topTitle{
+    font-size: 4.6vw !important;
+  }
+
+  .topIcon{
+    font-size: 24px !important;
+  }
+
+  .authBox{
+    margin-top: 75px !important;
+    width: 80% !important;
+  }
+
+  .welcomeText2{
+    font-size: 4vw !important;
+  }
+
+  .welcomeText1{
+    font-size: 4.8vw !important;
+  }
+
+  .song-list{
+    grid-template-columns: repeat(1, 1fr) !important;
+  }
+
+  .play-pause-btn{
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .control-btn{
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  #playStatus{
+    font-size: 3.2vw !important;
+  }
+
+  .img-thumbnail{
+    width: 150px !important;
+    height: 150px !important;
+  }
+
+  .playerLogo{
+    width: 65px !important;
+  }
+
+  .playerLogoText{
+    font-size: 4.8vw !important;
+  }
+
+  .number-circle,
+  .rank-badge.third-place,
+  .rank-badge.runner-up,
+  .rank-badge.champion{
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .song-title{
+    font-size: 3vw;
+    font-weight: 100;
+  }
+
+  .card-title{
+    font-size: 4.8vw;
+  }
+
+  .custom-icon{
+    width: 110px;
+    height: 110px;
+  }
+
+  .video-icon{
+    width: 180px;
+    margin: auto;
+  }
+
+  .coverBOX{
+    margin: auto !important;
+  }
 }
 
   

@@ -129,7 +129,7 @@ Music Player
       <td class="py-2 text-center">
         <div class="audio-img-container">
             <a href="{% url 'player' musicName categorytitle artistName list.songname %}">
-               <img src="{{list.cltnImage.url}}" alt="" class="img-icon">
+               <img src="{{list.cltnImage.url|cl_opt:'thumb'}}" alt="image" class="img-icon">
             </a>      
         </div>
      </td>

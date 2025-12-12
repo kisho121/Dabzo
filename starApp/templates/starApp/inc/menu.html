@@ -14,14 +14,14 @@
     }
     
     .menubar.expanded {
-        width: 11vw !important;
+        width: 11vw ;
         transform: translateX(0);
     }
     
     .menu-toggle-btn {
         position: fixed;
-        left: 10px;
-        top: 10px;
+        left: 5px;
+        top: 5px;
         width: 45px;
         height: 45px;
         background: linear-gradient(135deg, #00B7B5, #009d9b);
@@ -92,16 +92,50 @@
         height: 3.5rem;
         margin-bottom: 20px;
     }
-    
-    /* Mobile responsive */
-    @media (max-width: 768px) {
-        .menubar.expanded {
+     @media (max-width: 1200px) {
+        /* .log-nav{
+            width: 6rem;
+        } */
+       .menubar.expanded {
             width: 180px !important;
         }
-        
-        .menubar.expanded ~ .menu-toggle-btn {
-            left: 195px;
+        .menu-toggle-btn.expanded {
+            left: 165px;
         }
+    }
+      @media (max-width: 900px) {
+        .menubar.expanded {
+            width: 160px !important;
+        }
+        .menu-toggle-btn.expanded {
+            left: 135px;
+        }
+    }
+     @media (max-width: 768px) {
+        /* .log-nav{
+            width: 9rem;
+        } */
+        .menubar.expanded {
+            width: 140px !important;
+        }
+        .menu-toggle-btn.expanded {
+            left: 115px;
+        }
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 576px) {
+        /* .log-nav{
+            width: 5rem;
+        } */
+        .menubar.expanded {
+            width: 120px !important;
+        }
+        .menu-toggle-btn.expanded {
+            left: 95px;
+        }
+                
+        
     }
 </style>
 

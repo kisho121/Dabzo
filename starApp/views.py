@@ -179,31 +179,95 @@ def otp_verification(request):
 
 
 # ============ UPDATED musicView FUNCTION - NO AUTH REQUIRED ============
-def musicView(request):
-    slides = carousel.objects.all()
-    music = MusicModel.objects.all()
-    favourites = CollectionModel.objects.filter(favourite=1)
+# def musicView(request):
+#     slides = carousel.objects.all()
+#     music = MusicModel.objects.all()
+#     favourites = CollectionModel.objects.filter(favourite=1)
     
-    # Get top 10 globally most liked songs
-    global_top_songs = CollectionModel.objects.annotate(
+#     # Get top 10 globally most liked songs
+#     global_top_songs = CollectionModel.objects.annotate(
+#         like_count=Count('userfavourite')
+#     ).filter(
+#         like_count__gt=0
+#     ).order_by('-like_count')[:10]
+    
+#     # Calculate percentages for progress bars
+#     if global_top_songs.exists():
+#         max_likes = global_top_songs[0].like_count
+#         for song in global_top_songs:
+#             song.like_percentage = (song.like_count / max_likes * 100) if max_likes > 0 else 0
+    
+#     # Get user's wishlist IDs only if authenticated
+#     user_favourites = []
+#     user_wishlist_ids = []
+    
+#     if request.user.is_authenticated:
+#         wishlist_ids = list(
+#             UserFavourite.objects.filter(user=request.user).values_list('song_id', flat=True)
+#         )
+#         user_favourites = wishlist_ids
+#         user_wishlist_ids = wishlist_ids
+    
+#     context = {
+#         "slides": slides,
+#         "music": music,
+#         "favourites": favourites,
+#         "global_top_songs": global_top_songs,
+#         "user_wishlist_ids": user_wishlist_ids,
+#         "user_favourites": user_favourites,
+#         "is_authenticated": request.user.is_authenticated,  # For template checks
+#     }
+    
+#     return render(request, 'starApp/webpage/Audio.html', context)
+
+def musicView(request):
+    # Optimize: Limit carousel slides and only get needed fields
+    slides = carousel.objects.only('id', 'carousel_image', 'alt_text')[:5]
+    
+    # Optimize: Only get active music and limit fields
+    music = MusicModel.objects.filter(status=False).only(
+        'id', 'musicName', 'musicImage'
+    )[:12]  # Limit to reasonable number
+    
+    # Optimize: Simpler query for trending/favourite songs
+    favourites = CollectionModel.objects.filter(favourite=True).select_related(
+        'categoryModel__musicModel__musickey'
+    ).only(
+        'id', 'cltnImage', 'songname', 'movie', 'artist', 'audio',
+        'categoryModel__artistName',
+        'categoryModel__musicModel__categorytitle',
+        'categoryModel__musicModel__musickey__musicName'
+    )[:20]  # Limit results
+    
+    # Optimize: Single query with annotation for top songs
+    global_top_songs = CollectionModel.objects.select_related(
+        'categoryModel__musicModel__musickey'
+    ).only(
+        'id', 'cltnImage', 'songname', 'movie', 'artist', 'audio',
+        'categoryModel__artistName',
+        'categoryModel__musicModel__categorytitle', 
+        'categoryModel__musicModel__musickey__musicName'
+    ).annotate(
         like_count=Count('userfavourite')
     ).filter(
         like_count__gt=0
     ).order_by('-like_count')[:10]
     
-    # Calculate percentages for progress bars
-    if global_top_songs.exists():
-        max_likes = global_top_songs[0].like_count
+    # Calculate percentages efficiently
+    if global_top_songs:
+        max_likes = global_top_songs[0].like_count if global_top_songs[0].like_count > 0 else 1
         for song in global_top_songs:
-            song.like_percentage = (song.like_count / max_likes * 100) if max_likes > 0 else 0
+            song.like_percentage = (song.like_count / max_likes * 100)
     
-    # Get user's wishlist IDs only if authenticated
+    # Get user favourites efficiently (single query)
     user_favourites = []
     user_wishlist_ids = []
     
     if request.user.is_authenticated:
+        # Use values_list for better performance
         wishlist_ids = list(
-            UserFavourite.objects.filter(user=request.user).values_list('song_id', flat=True)
+            UserFavourite.objects.filter(user=request.user)
+            .values_list('song_id', flat=True)
         )
         user_favourites = wishlist_ids
         user_wishlist_ids = wishlist_ids
@@ -215,11 +279,10 @@ def musicView(request):
         "global_top_songs": global_top_songs,
         "user_wishlist_ids": user_wishlist_ids,
         "user_favourites": user_favourites,
-        "is_authenticated": request.user.is_authenticated,  # For template checks
+        "is_authenticated": request.user.is_authenticated,
     }
     
     return render(request, 'starApp/webpage/Audio.html', context)
-
 
 # ============ UPDATED toggle_favourite - LOGIN REQUIRED ============
 @login_required
@@ -346,9 +409,16 @@ def MusicPlayerView(request, catname, aname, cltname, pname):
 
  
 def videoView(request):
-    swap = Thumbnail.objects.all()
-    videos = VideosModel.objects.all()
-    likes = CategoryListModel.objects.filter(like=1)
+    swap = Thumbnail.objects.only('thumb_image', 'thumb_text')[:5]
+    videos = VideosModel.objects.only('videoName', 'videoImage')[:12] 
+    likes = CategoryListModel.objects.filter(like=1).select_related(
+        'videotitle__videomodel'
+    ).only(
+        'subtitle', 
+        'videothumbnail',
+        'videotitle__categorytitle',
+        'videotitle__videomodel__videoName'
+    )[:20]   # limit to 20
     context = {
         "swap": swap,
         "videos": videos,
@@ -379,6 +449,7 @@ def streamView(request, pname, sname, dname):
     
     streaming = CategoryListModel.objects.filter(videotitle=category_obj)
     context = {
+        
         'streaming': streaming,
         'videoName': pname,
         'categorytitle': sname,

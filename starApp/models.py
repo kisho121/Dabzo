@@ -7,6 +7,9 @@ class UserProfile(models.Model):
     dateOfBirth = models.DateField(null=True)
     profilePicture = CloudinaryField('image', blank=True, null=True)
 
+    class Meta:
+        db_table = 'starapp_userprofile'
+
     def __str__(self):
         return self.user.username
 
@@ -15,11 +18,17 @@ class OTPVerification(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     otp = models.CharField(max_length=6)
 
+    class Meta:
+        db_table = 'starapp_otpverification'
+
 
 class carousel(models.Model):
     carousel_image = CloudinaryField('image')
     alt_text = models.CharField(max_length=150, default="slide_image")
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'starapp_carousel'
 
 
 class MusicModel(models.Model):
@@ -27,6 +36,9 @@ class MusicModel(models.Model):
     musicImage = CloudinaryField('image', blank=True)
     status = models.BooleanField(default=False, help_text='0-show,1-Hidden')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'starapp_musicmodel'
 
     def __str__(self):
         return self.musicName
@@ -36,6 +48,9 @@ class AudioTitleModel(models.Model):
     musickey = models.ForeignKey(MusicModel, on_delete=models.CASCADE)
     categorytitle = models.CharField(max_length=120)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'starapp_audiotitlemodel'
 
     def __str__(self):
         return self.categorytitle
@@ -48,6 +63,9 @@ class CategoryModel(models.Model):
     artistDescription = models.CharField(max_length=1500)
     status = models.BooleanField(default=False, help_text='show-0,Hidden=1')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'starapp_categorymodel'
 
     def __str__(self):
         return self.artistName
@@ -64,6 +82,9 @@ class CollectionModel(models.Model):
     favourite = models.BooleanField(default=False, help_text='show-0,Trending-1')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'starapp_collectionmodel'
+
     def __str__(self):
         return self.songname
 
@@ -73,12 +94,18 @@ class Thumbnail(models.Model):
     thumb_text = models.CharField(max_length=150, default="slide_image")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'starapp_thumbnail'
+
 
 class VideosModel(models.Model):
     videoName = models.CharField(max_length=150)
     videoImage = CloudinaryField('image')
     bgvideo = CloudinaryField(resource_type='video')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'starapp_videosmodel'
 
     def __str__(self):
         return self.videoName
@@ -88,6 +115,9 @@ class VideoTitleModel(models.Model):
     videomodel = models.ForeignKey(VideosModel, on_delete=models.CASCADE)
     categorytitle = models.CharField(max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'starapp_videotitlemodel'
 
     def __str__(self):
         return self.categorytitle
@@ -108,6 +138,9 @@ class CategoryListModel(models.Model):
     like = models.BooleanField(default=False, help_text='default-0,like-1')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        db_table = 'starapp_categorylistmodel'
+
     def __str__(self):
         return self.subtitle
 
@@ -118,6 +151,7 @@ class UserFavourite(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        db_table = 'starapp_userfavourite'
         unique_together = ('user', 'song')
         verbose_name = 'User Favourite'
         verbose_name_plural = 'User Favourites'
