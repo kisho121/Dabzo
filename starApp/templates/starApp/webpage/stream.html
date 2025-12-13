@@ -51,7 +51,7 @@ Video | streaming
                                 <p class="text-white">No video available.</p>
                             {% endif %}
                         </div>                    
-                        <p class="text-white">{{ videodescription }}</p>
+                        <p class="text-white text-center">{{ videodescription }}</p>
                         <!-- {% if like %}
                         <i class="bi bi-heart-fill text-danger "></i>
                         {% else %}
@@ -62,13 +62,13 @@ Video | streaming
                         <p>Extracted Video ID: {{ video|extract_youtube_id }}</p> -->
                     </div>
 
-                    <div class="container-fluid px-0 mx-0 rounded-3" style="background-color: #01111e;">
+                    <div class="container-fluid px-0 mx-0 rounded-3 my-2" style="background-color: #01111e;">
 
-                        <div class="row m-0 p-0">
-                            <h2 class="text-center text-muted fw-bold" style="text-shadow: 1px 1px 1px rgb(157, 154, 154); text-transform: uppercase;">{{categorytitle}}</h2>
+                        <div class="row mx-0 p-0">
+                            <h2 class="text-center text-white fw-bolder" style="text-shadow: 1px 1px 1px white; text-transform: uppercase; font-family: serif;">{{categorytitle}}</h2>
                             {% for stream in streaming %}
                             <div class="col-12 col-sm-6 col-md-4 col-lg-3 px-lg-1">
-                                <div class="text-start play-card h-75 m-2">
+                                <div class="text-start play-card h-75 my-3 mx-2">
                                     <a class="link" href="{% url 'stream' videoName categorytitle stream.subtitle %}">
                                         <img class="card-img-top playcardimg rounded-2" style="object-fit: cover;" src="{{ stream.videothumbnail.url|cl_video_thumb }}"  alt="Title" />
                                         <div class="m-0 p-0">

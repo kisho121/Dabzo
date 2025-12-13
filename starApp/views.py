@@ -14,6 +14,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count  
 from datetime import date, timedelta
+import logging
+import threading
+
 
 
 
@@ -50,14 +53,30 @@ def login_page(request):
             return redirect('account_login')
         
      return render(request,'starApp/account/login.html')
- 
-def sent_otp(email, otp):
-    subject = 'Your OTP for Registration'
-    message = f'Your OTP for Registration is {otp}'
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [email]
-    send_mail(subject, message, email_from, recipient_list)    
 
+logger = logging.getLogger(__name__)
+
+def sent_otp(email, otp):
+    try:
+        send_mail(
+            subject="Your OTP for Registration",
+            message=f"Your OTP for Registration is {otp}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+            fail_silently=False,
+        )
+    except Exception as e:
+        logger.error(f"OTP email failed for {email}: {e}")
+        # DO NOT crash the request
+
+def sent_otp_async(email, otp):
+    threading.Thread(
+        target=sent_otp,
+        args=(email, otp),
+        daemon=True
+    ).start()
+
+  
 def calculate_age(birth_date):
     """Calculate age from date of birth"""
     today = date.today()
@@ -108,9 +127,10 @@ def registerpage(request):
 
             otp = random.randint(100000, 999999)
             OTPVerification.objects.create(user=user, otp=otp)
-            sent_otp(user.email, otp)
+            sent_otp_async(user.email, otp)
+
             
-            messages.success(request, 'Registration successful! Please verify your email with the OTP sent.')
+            messages.success(request, 'Please verify the OTP sent to your registered email.')
             return redirect(reverse('otp_verification') + f'?email={user.email}')
         else:
             # Display form errors
@@ -153,7 +173,8 @@ def otp_verification(request):
             new_otp = random.randint(100000, 999999)
 
             OTPVerification.objects.create(user=user, otp=new_otp)
-            sent_otp(email, new_otp)
+            sent_otp_async(email, new_otp)
+
 
             messages.success(request, "OTP resent successfully!")
             return redirect(reverse('otp_verification') + f'?email={email}')

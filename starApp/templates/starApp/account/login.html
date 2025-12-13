@@ -30,9 +30,9 @@ Login|TrumpKart
         </div>
 
     </div>
-<div class="container col-10 col-sm-10 col-md-6 col-lg-4 pb-3 login rounded-3" style="background-color: #00B7B5;">
+<div class="container col-10 col-sm-10 col-md-6 col-lg-4 p-3 my-3 login rounded-3" style="background-color: #00B7B5;">
   
-  <section class="container pt-3 my-2 ">
+  <section class="container my-2 ">
      
                   <form method="POST" action="">
                    {% csrf_token %}
@@ -51,12 +51,12 @@ Login|TrumpKart
                        </button>
                      </div>
                  </div>
-                 <button type="submit" class="btn btn-success fw-bold rounded-2">Login</button>
+                 <button type="submit" class="btn btn-primary text-light fw-bold rounded-2 mb-2" style="font-family: serif;">LOGIN</button><br>
 
-                  <a class="text-light small text-decoration-none" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a> <br>
-                  <p style="font-family: serif;">
-                      Create New Account 
-                      <a href="{% url 'account_signup' %}" class="btn btn-primary fw-bold">Sign up</a>
+                  <a class="text-danger fw-bolder text-decoration-none" href="{% url 'account_reset_password' %}"><button class="btn btn-outline-danger fw-bolder">{% trans "Forgot Password" %}</button></a> <br>
+                  <p class="small" style="font-family: serif;">
+                      Create New Account :
+                      <a href="{% url 'account_signup' %}" ><b class="text-white fw-bolder fs-6"> SIGN UP</b> </a>
                   </p>
                   </form>
                  

@@ -70,7 +70,7 @@ Music
       </div>
       
 <!-- ============ NEW GLOBAL TOP 10 MOST LIKED SONGS SECTION ============ -->
-<div class="global-top-section container-fluid p-0">
+<div class="global-top-section container-fluid py-3 px-2">
     <div class="section-header text-center">
         <i class="bi bi-trophy text-warning fs-3"></i>
         <h2 class="section-title text-white fw-bolder" style="text-shadow: 1px 1px 1px white; font-family: sans-serif;">TOP 10 LOVED SONGS</h2> 
@@ -79,7 +79,7 @@ Music
 
     {% if global_top_songs %}
     <div class="table-responsive">
-        <table class="container-fluid global-top-table">
+        <table class="container-fluid global-top-table px-1">
             <thead>
                 <tr>
                     <th class="py-3 text-black text-center col-1">Rank</th>
@@ -147,7 +147,7 @@ Music
                     <td class="text-center py-3">
                         <div class="like-stats">
                             <div class="like-count-box">
-                                <i class="bi bi-heart-fill text-danger"></i>
+                                <!-- <i class="bi bi-heart-fill text-danger"></i> -->
                                 <span class="like-count-num fs-6">{{ song.like_count }}</span>
                             </div>
                             <div class="popularity-bar">
