@@ -1,5 +1,6 @@
 {% extends 'starApp/layouts/main.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}My Wishlist{% endblock title %}
 
@@ -139,7 +140,7 @@
                             <td class="py-2 text-center text-light">{{ forloop.counter }}</td>
                             <td class="py-2 text-center">
                                 <div class="audio-img-container">
-                                   <img src="{{song.cltnImage.url}}" alt="" class="img-icon">          
+                                   <img src="{{song.cltnImage.url|cl_opt:'thumb'}}" alt="" class="img-icon">          
                                 </div>
                             </td>
                             <td class="text-light song-title ps-1 ps-lg-5 py-2 ">{{ song.songname }}</td>

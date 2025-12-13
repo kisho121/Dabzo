@@ -23,3 +23,10 @@ staticfiles/
 # OS files
 .DS_Store
 Thumbs.db
+
+*.json
+*.sql
+*.db
+*_data.json
+backup.sql
+migrate_sqlite_to_pg.py

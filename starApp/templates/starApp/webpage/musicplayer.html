@@ -1,6 +1,6 @@
 {% extends 'starApp/layouts/main.html' %}
 {% load static %}
-
+{% load custom_filters %}
 {% block title %}
 Music Player
 {% endblock title %}
@@ -602,7 +602,8 @@ Music Player
     function toggleLike(button, songId) {
       // Check if user is authenticated
       {% if not user.is_authenticated %}
-        alert('Please login to add songs to your playlist');
+        // alert('Please login to add songs to your playlist');
+        showNotification('Please login to add songs to your playlist', 'warning')
         window.location.href = "{% url 'account_login' %}";
         return;
       {% endif %}

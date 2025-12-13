@@ -56,8 +56,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google', 
-    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
     'cloudinary',
     'cloudinary_storage',
     # 'debug_toolbar',
@@ -233,29 +232,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     },
     
-    
-    'facebook': {
-        'METHOD': 'oauth2', 
-        'SCOPE': ['email', 'public_profile'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'INIT_PARAMS': {'cookie': True},
-        'FIELDS': [
-            'id',
-            'first_name',
-            'last_name',
-            'middle_name',
-            'name',
-            'name_format',
-            'picture',
-            'short_name'
-        ],
-        'EXCHANGE_TOKEN': True,
-       
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v13.0',
-        'GRAPH_API_URL': 'https://graph.facebook.com/v13.0',
-    
-}
 }
 
 LOGIN_REDIRECT_URL ="home"

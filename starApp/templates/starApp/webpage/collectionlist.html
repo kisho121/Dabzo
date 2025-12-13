@@ -1,7 +1,7 @@
 {% extends 'starApp/layouts/main.html' %}
 
 {% load static %}
-{% load cloudinary_filters %}
+{% load custom_filters %}
 
 
 {% block title %}
@@ -173,7 +173,7 @@ Music | List
     
     // Check if user is authenticated
     {% if not user.is_authenticated %}
-      alert('Please login to add songs to your playlist');
+      showNotification('Please Login in to Add the song to the Playlist', 'warning')
       window.location.href = "{% url 'account_login' %}";
       return;
     {% endif %}
